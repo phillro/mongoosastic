@@ -19,6 +19,6 @@
     , "node-schedule":">0.0.1"
     , "async":">0.0.1"
     , "node.io":">0.0.1"
-
-  }
+    , "mediaamp-data":"git+ssh://git@github.com:MediaProjectAmp/MediaAmp-Models.git#Master"
+    }
 }
