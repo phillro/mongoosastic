@@ -26,10 +26,9 @@ exports.sourcecontentShow = function (req, res) {
 exports.sourcecontentList = function (req, res) {
     var start = parseInt(req.query.start || 0)
     var perpage = 20
-    var previous=false
-    if(start>0){
-        previous=(start-perpage)>0 ? start-perpage :0
-    }
+    var previous=0
+    previous=(start-perpage)>0 ? start-perpage :0
+
     models.SourceContent.count(function(countError,count){
         models.SourceContent.find().skip(start).limit(perpage).sort('createdAt', 'descending').execFind(function (err, results) {
             if (err) {
