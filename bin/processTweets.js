@@ -9,7 +9,15 @@ var MediaAmpModels = require('mediaamp-models/index.js')
 
 
 var processTweetJob = new require('../lib/jobs/processTweetJob')(conf)
-nodeio.start(processTweetJob,{},function(err,results){
-    console.log('processed')
-    process.exit(0)
-})
+
+var startProcessTweets = function(){
+    nodeio.start(processTweetJob,{},function(err,results){
+        console.log('processed')
+        setTimeout(startProcessTweets,30000)
+      //  process.exit(0)
+    })
+}
+
+startProcessTweets()
+
+
