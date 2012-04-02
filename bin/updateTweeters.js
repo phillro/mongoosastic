@@ -78,7 +78,8 @@ Tweeter.find({}, function (error, results) {
         for (var r = 0; r < requestsRequired; r++) {
             var users = ''
             var end = (results.length - r * maxTermsPerRequest) > maxTermsPerRequest ? maxTermsPerRequest : results.length
-            for (var i = (r * maxTermsPerRequest); i < end; i++) {
+            //for (var i = (r * maxTermsPerRequest); i < end; i++) {
+            for (var i = (r * maxTermsPerRequest); i < (end+(r * maxTermsPerRequest)); i++) {
                 users += results[i].screen_name.replace(/\@/, '') + ","
             }
             logger.log('info', users)
