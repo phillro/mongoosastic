@@ -1,0 +1,27 @@
+<h1><%=total%> Sources</h1>
+<div>
+    <div>
+    <%if(previous){%>
+    <div style="float:left; margin-right: 20px"><a href="/sourcecontent/list?start=<%=previous%>">Previous</a></div>
+    <%}%>
+    <div style="float:left"><a href="/sourcecontent/list?start=<%=start%>">Next</a></div>
+    </div>
+    <br>
+    <div>
+
+        <ul style="list-style: none;">
+            <%for(var d =0;d<source_contents.length;d++){%>
+            <li style="margin-bottom: 15px;">
+                <div >
+                    <%=source_contents[d].createdAt%>
+                </div>
+                <div>
+                    <a href="/sourcecontent/show/<%=source_contents[d]._id%>"> <%=source_contents[d].url%></a>
+                </div>
+                  </li>
+            <%}%>
+        </ul>
+
+    </div>
+</div>
+

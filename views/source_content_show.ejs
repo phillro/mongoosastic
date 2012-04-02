@@ -1,0 +1,8 @@
+<ul>
+    <% for(var field in source_content._doc){%>
+        <% if(field !='body'){%>
+            <li><%=field%> : <%=source_content._doc[field]%></li>
+        <%}%>
+    <%}%>
+</ul>
+<iframe src="/sourcecontent/show/<%=source_content._id%>/body" height="800" width="1024"></iframe>
