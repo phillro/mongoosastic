@@ -16,6 +16,7 @@ exports.sourcecontentShow = function (req, res) {
         if (err) {
             res.send(err)
         } else {
+
             res.render('source_content_show', {
                 source_content:result
             })
