@@ -13,7 +13,7 @@ var env = cli.args.shift()
 
 conf = require('../etc/conf')[env]
 
-var twitterClient = new require('../lib/TwitterclientWrapper')(conf)
+var twitterClient = new require('../lib/TwitterClientWrapper')(conf)
 var mongoose = require('mongoose')
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
 var mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
