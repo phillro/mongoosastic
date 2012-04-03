@@ -1,0 +1,23 @@
+<div>
+    <div>
+        <h2><%=tweeter.name%></h2>
+        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
+    </div>
+    <br>
+
+    <div>
+        <ul style="list-style: none">
+            <li style="margin-bottom: 5px">
+                <label>Name</label> <%=tweeter._doc['name']%>
+            </li>
+            <li style="margin-bottom: 5px">
+                            <label>Screen Name</label> <%=tweeter._doc['screen_name']%>
+            </li>
+            <% for(var field in tweeter._doc){%>
+            <li style="margin-bottom: 5px">
+                <label><%=field%></label> <%=tweeter._doc[field]%>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>

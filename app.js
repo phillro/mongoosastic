@@ -22,6 +22,7 @@ var app = module.exports = express.createServer();
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
 GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
 var MediaAmpModels = require('mediaamp-models/index.js')
+GLOBAL.maHelper = new require('./lib/Helpers')(conf)
 
 var authWrapper = new require('./lib/auth')()
 var everyauthRoot = __dirname + '/node_modules/everyauth';
@@ -93,13 +94,31 @@ app.configure(function () {
 everyauth.helpExpress(app);
 
 app.all('/sourcecontent/*',function(req,res, next){
+    if(env=='production'){
     if(req.session.auth){
         if(req.session.auth.loggedIn)
             next()
     }
     else
         res.redirect('/login')
+    }else{
+        next()
+    }
 })
+
+app.all('/tweeters/*',function(req,res, next){
+    if(env=='production'){
+    if(req.session.auth){
+        if(req.session.auth.loggedIn)
+            next()
+    }
+    else
+        res.redirect('/login')
+    }else{
+        next()
+    }
+})
+
 
 app.get('/logout', function (req, res) {
     req.logout();
@@ -109,6 +128,10 @@ app.get('/logout', function (req, res) {
 app.get('/sourcecontent/show/:id', routes.sourcecontentShow);
 app.get('/sourcecontent/show/:id/body', routes.sourcecontentShowBody);
 app.get('/sourcecontent/list', routes.sourcecontentList);
+app.get('/tweeters/list', routes.tweetersList);
+app.get('/tweeters/show/:id', routes.tweeterShow);
+app.get('/tweeters/create', routes.tweeterNew);
+app.post('/tweeters/save', routes.tweeterSave);
 app.get('/', routes.index);
 
 
