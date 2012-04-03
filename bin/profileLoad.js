@@ -8,6 +8,14 @@ var cli = require('cli')
 var hash = require('mhash').hash
 conf = require('../etc/conf').development
 
+var cli = require('cli')
+cli.parse({
+    verbose:['v', 'Print response']
+});
+
+var env = cli.args.shift()
+
+conf = require('../etc/conf')[env]
 
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
 var mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
@@ -16,9 +24,7 @@ var Tweeter = mediaAmpDb.model('tweeter',MediaAmpModels.TweeterSchema)
 //var Profile = mediaAmpDb.model('profiles', require('../models/profiles'))
 
 
-cli.parse({
-    verbose:['v', 'Print response']
-});
+
 
 var loadSeedProfiles = function (file, callback) {
 

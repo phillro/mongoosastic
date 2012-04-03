@@ -1,5 +1,11 @@
 var async = require('async')
-conf = require('../etc/conf').development
+var cli = require('cli')
+cli.parse({
+    verbose:['v', 'Print response']
+});
+
+var env = cli.args.shift()
+conf = require('../etc/conf')[env]
 
 var nodeio = require('node.io')
 var mongoose = require('mongoose')

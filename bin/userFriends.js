@@ -45,7 +45,7 @@ var lookupUsersById = function (usersArray, lookupUsersCallback) {
     for (var r = 0; r < requestsRequired; r++) {
         var users = ''
 
-        var end = (usersArray.length - r * maxTermsPerRequest) > maxTermsPerRequest ? maxTermsPerRequest : usersArray.length
+        var end = (r+1)*maxTermsPerRequest < usersArray.length ? (r+1)*maxTermsPerRequest : usersArray.length
         /*for (var i = (r * maxTermsPerRequest); i < (end+(r * maxTermsPerRequest)); i++) {
          users += usersArray[i] + ","
          }*/
@@ -69,12 +69,18 @@ var lookupUsersById = function (usersArray, lookupUsersCallback) {
     }
 }
 
-lookupUsersById(robsFriends, function (usersObj) {
+lookupUsersById(iansFriends, function (usersObj) {
+    var rows = []
     for (var i = 0; i < usersObj.length; i++) {
-        delete usersObj[i].status
+        var row = {
+            id:usersObj[i].id,
+            screen_name:usersObj[i].screen_name,
+            description:usersObj[i].description
+        }
+        rows.push(row)
     }
     csv()
-        .from(usersObj)
+        .from(rows)
         .toStream(process.stdout, {end:false})
         .on('end', function () {
    //         console.log('done')

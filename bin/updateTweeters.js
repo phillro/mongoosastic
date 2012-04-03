@@ -6,7 +6,16 @@
  */
 
 var TwitterClient = require('ntwitter');
-var conf = require('../etc/conf.js').development
+var cli = require('cli')
+cli.parse({
+    verbose:['v', 'Print response']
+});
+
+var env = cli.args.shift()
+
+conf = require('../etc/conf')[env]
+
+
 logger = conf.logger
 var mongoose = require('mongoose')
 var async = require('async')
@@ -19,12 +28,6 @@ var Tweeter = mediaAmpDb.model('tweeter',MediaAmpModels.TweeterSchema)
 //Maximum of 100 users per lookup showUser API call
 var maxTermsPerRequest = 100
 
-
-var cli = require('cli')
-
-cli.parse({
-    verbose:['v', 'Print response']
-});
 
 
 var twit = new TwitterClient({
@@ -77,10 +80,10 @@ Tweeter.find({}, function (error, results) {
         var requestsRequired = Math.ceil(results.length / maxTermsPerRequest)
         for (var r = 0; r < requestsRequired; r++) {
             var users = ''
-            var end = (results.length - r * maxTermsPerRequest) > maxTermsPerRequest ? maxTermsPerRequest : results.length
-            //for (var i = (r * maxTermsPerRequest); i < end; i++) {
-            for (var i = (r * maxTermsPerRequest); i < (end+(r * maxTermsPerRequest)); i++) {
-                users += results[i].screen_name.replace(/\@/, '') + ","
+            var end = (r+1)*maxTermsPerRequest < results.length ? (r+1)*maxTermsPerRequest : results.length
+            for (var i = (r * maxTermsPerRequest); i < end; i++) {
+                if(typeof results[i]!=undefined)
+                    users += results[i].screen_name.replace(/\@/, '') + ","
             }
             logger.log('info', users)
             twit.showUser(users, function (err, users) {
