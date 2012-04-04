@@ -19,8 +19,8 @@ var processTweetJob = new require('../lib/jobs/processTweetJob')(conf)
 var startProcessTweets = function(){
     nodeio.start(processTweetJob,{},function(err,results){
         console.log('processed')
-        setTimeout(startProcessTweets,30000)
-      //  process.exit(0)
+        //setTimeout(startProcessTweets,30000)
+        process.exit(0)
     })
 }
 
