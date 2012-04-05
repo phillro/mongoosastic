@@ -4,7 +4,7 @@ cli.parse({
     verbose:['v', 'Print response']
 });
 
-var env = cli.args.shift()||'development'
+var env = cli.args.shift()||'production'
 conf = require('../etc/conf')[env]
 
 var nodeio = require('node.io')
