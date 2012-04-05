@@ -42,8 +42,35 @@ var processTweetsComplete = function(code){
 
 processTweets(processTweetsComplete)
 
-    /*
-var processTweetsSchedule = schedule.scheduleJob('0,10 * * * *', function () {
-    logger.log('info', 'Exeucting scrapeLinkedData')
-    processTweets()
-});*/
+
+var processSourceContents = function (callback) {
+    var processSourceContentsData = child_proc.spawn('node', ['processSourceContents.js',env]);
+
+    processSourceContentsData.stdout.on('data', function (data) {
+        logger.log('info', data)
+    });
+
+
+    processSourceContentsData.stderr.on('data', function (chunk) {
+        logger.log('info', chunk);
+    })
+
+    processSourceContentsData.on('exit', function (code) {
+        if (code !== 0) {
+            logger.log('error', 'processSourceContentsData Exited with code: ' + code)
+        } else {
+            logger.log('info', 'processSourceContentsData Complete')
+        }
+        if(typeof callback=='function')
+            callback(code)
+    });
+}
+
+var processSourceContentsComplete = function(code){
+    logger.log('info','Exited with code '+code)
+    setTimeout(processSourceContents(processSourceContentsComplete),15000)
+}
+
+processSourceContents(processSourceContentsComplete)
+
+
