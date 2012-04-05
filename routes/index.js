@@ -115,7 +115,7 @@ exports.articlesList = function (req, res) {
     var previous = 0
     previous = (start - perpage) > 0 ? start - perpage : 0
 
-    models.Tweeter.count(function (countError, count) {
+    models.Article.count(function (countError, count) {
         models.Article.find().skip(start).limit(perpage).sort('createdAt', 'descending').execFind(function (err, results) {
             if (err) {
                 res.send(err)
