@@ -4,7 +4,7 @@ cli.parse({
     verbose:['v', 'Print response']
 });
 
-var env = cli.args.shift()||'development'
+var env = cli.args.shift()||'production'
 conf = require('../etc/conf')[env]
 
 var nodeio = require('node.io')
@@ -19,7 +19,8 @@ var createArticlesFromSourceContentJob = new require('../lib/jobs/createArticles
 var startProcessCreateArticlesFromSourceContentJob = function(){
     nodeio.start(createArticlesFromSourceContentJob,{},function(err,results){
         console.log('processed')
-        process.exit(0)
+        //process.exit(0)
+        setTimeout(startProcessCreateArticlesFromSourceContentJob,2000)
     })
 }
 
