@@ -106,9 +106,32 @@ exports.tweeterSave = function (req, res) {
 
         }
     })
-
-
 };
+
+
+exports.articlesList = function (req, res) {
+    var start = parseInt(req.query.start || 0)
+    var perpage = 20
+    var previous = 0
+    previous = (start - perpage) > 0 ? start - perpage : 0
+
+    models.Tweeter.count(function (countError, count) {
+        models.Article.find().skip(start).limit(perpage).sort('createdAt', 'descending').execFind(function (err, results) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.render('article_list', {
+                    articles:results,
+                    total:count,
+                    start:start + perpage,
+                    previous:previous
+                })
+            }
+        })
+    })
+}
+
+
 
 exports.index = function (req, res) {
     res.send('hi')

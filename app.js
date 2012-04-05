@@ -77,6 +77,7 @@ everyauth
     .registerSuccessRedirect('/');
 
 GLOBAL.models = {
+    Article:mediaAmpDb.model('article', MediaAmpModels.ArticleSchema),
     SourceContent:mediaAmpDb.model('source_content', MediaAmpModels.SourceContentSchema),
     Tweet:mediaAmpDb.model('tweet', MediaAmpModels.TweeterSchema),
     Tweeter:mediaAmpDb.model('tweeter', MediaAmpModels.TweeterSchema)
@@ -119,12 +120,28 @@ app.all('/tweeters/*',function(req,res, next){
     }
 })
 
+app.all('/articles/*',function(req,res, next){
+    if(env=='production'){
+    if(req.session.auth){
+        if(req.session.auth.loggedIn)
+            next()
+    }
+    else
+        res.redirect('/login')
+    }else{
+        next()
+    }
+})
+
 
 app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
 
+
+
+app.get('/articles/list', routes.articlesList);
 app.get('/sourcecontent/show/:id', routes.sourcecontentShow);
 app.get('/sourcecontent/show/:id/body', routes.sourcecontentShowBody);
 app.get('/sourcecontent/list', routes.sourcecontentList);
@@ -132,6 +149,7 @@ app.get('/tweeters/list', routes.tweetersList);
 app.get('/tweeters/show/:id', routes.tweeterShow);
 app.get('/tweeters/create', routes.tweeterNew);
 app.post('/tweeters/save', routes.tweeterSave);
+
 app.get('/', routes.index);
 
 
