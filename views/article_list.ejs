@@ -8,10 +8,6 @@
     </div>
     <br>
     <div>
-        <div style="float:left; margin-right: 20px"><a href="/articles/create">New</a></div>
-    </div>
-    <br>
-    <div>
         <ul style="list-style: none">
             <% for(var i=0;i<articles.length;i++){%>
             <% if(articles[i].title){%>
@@ -21,6 +17,7 @@
                 border-radius:25px;
                 -moz-border-radius:25px; /* Firefox 3.6 and earlier */ ">
                         <h3 style="margin-bottom: 0px; margin-top: 0px;"><a href="<%=articles[i].url%>" target="_blank"><%=articles[i].title%></a><br></h3>
+                    <div style="padding-left: 5px; padding-bottom: 5px;"><%=articles[i].createdAt%></div>
                         <% if(articles[i].referencing_tweet_ids){%>
                             <div style="padding-left: 5px; padding-bottom: 5px;">Referenced in <%=articles[i].referencing_tweet_ids.length%> tweets.</div>
                         <%}%>
