@@ -19,6 +19,12 @@ module.exports = {
                 new (winston.transports.Loggly)({level:'info', subdomain:'phillrodev', inputToken:'50d81abc-67db-42a5-9cfc-510fe80b96c9'})
             ]
         }),
+        articlePublisherLogger:new (winston.Logger)({
+            transports:[
+                consoleLogger,
+                new (winston.transports.Loggly)({level:'info', subdomain:'phillrodev', inputToken:'4938-62a6-4121-8350-2ece60709390'})
+            ]
+        }),
         twitter:{
             consumer_key:'hHQTSRyQLBbM3lKtoBjOmw',
             consumer_secret:'z2WUz36kD8HfbQAvBnVLLsQCc4CcCgLiG0LgJyJbU',
@@ -91,6 +97,12 @@ module.exports = {
             transports:[
                 consoleLogger,
                 new (winston.transports.Loggly)({level:'info', subdomain:'mediaamp', inputToken:'43503314-ebc4-4b07-ae6f-892d881930b1'})
+            ]
+        }),
+        articlePublisherLogger:new (winston.Logger)({
+            transports:[
+                consoleLogger,
+                new (winston.transports.Loggly)({level:'info', subdomain:'mediaamp', inputToken:'546cde43-3c38-46f2-808a-3472ccde2c87'})
             ]
         }),
         twitter:{
