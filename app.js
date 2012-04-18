@@ -121,7 +121,8 @@ app.all('/tweeters/*',function(req,res, next){
 })
 
 app.all('/articles/*',function(req,res, next){
-    if(env=='production'){
+    //if(env=='production'){
+        if(true){
     if(req.session.auth){
         if(req.session.auth.loggedIn)
             next()

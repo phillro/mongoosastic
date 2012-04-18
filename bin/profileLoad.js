@@ -6,15 +6,13 @@ var mongoose = require('mongoose')
 var csv = require('csv');
 var cli = require('cli')
 var hash = require('mhash').hash
-conf = require('../etc/conf').development
 
 var cli = require('cli')
 cli.parse({
     verbose:['v', 'Print response']
 });
 
-var env = cli.args.shift()
-
+var env = cli.args.shift()||'development'
 conf = require('../etc/conf')[env]
 
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName

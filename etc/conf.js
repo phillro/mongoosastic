@@ -42,7 +42,7 @@ module.exports = {
         },
 
         mongo:{
-            dbName:'mediaamp-proto',
+            dbName:'mediaamp2',
             port:27017,
             host:'localhost',
             user:'devuser',
