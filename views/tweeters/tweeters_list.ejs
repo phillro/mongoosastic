@@ -16,7 +16,9 @@
             <% for(var i=0;i<tweeters.length;i++){%>
             <li style="margin-bottom: 5px">
                 <div>
-                    <a href="/tweeters/show/<%=tweeters[i]._id%>"><%=tweeters[i].name%></a><br>
+                    <a href="/tweeters/show/<%=tweeters[i]._id%>"><%=tweeters[i].name%></a>
+                    <a href="/tweeters/edit/<%=tweeters[i]._id%>">Edit</a>
+                    <br>
                     <%=tweeters[i].screen_name%><br>
                     <%=tweeters[i].description%><br>
                 </div>

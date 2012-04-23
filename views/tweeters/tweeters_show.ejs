@@ -1,0 +1,44 @@
+<div>
+    <div>
+        <h2>
+            <% if(tweeter.profile_image_url){%>
+                <img src="<%=tweeter.profile_image_url%>"/>
+            <%}%>
+            <%=tweeter.name%>
+        </h2>
+        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/tweeters/create">Create New</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/tweeters/edit/<%=tweeter._id%>">Edit</a></div>
+
+    </div>
+    <br>
+
+    <div>
+        <% var hard_fields=['screen_name','ma_about','ma_publications','name'] %>
+        <ul class="show_list">
+            <li>
+                <label>Name</label> <%=tweeter._doc['name']%>
+            </li>
+            <li>
+                            <label>Twitter Screen Name</label> <%=tweeter._doc['screen_name']%>
+            </li>
+            <li>
+                            <label>MA Publication</label>
+                <% for(var p=0;p<tweeter.loaded_ma_publications.length;p++){%>
+                    <%=tweeter.loaded_ma_publications[p].pub_name%>,
+                <%}%>
+
+            </li>
+            <li>
+                <label>MA About</label> <%=tweeter._doc['ma_about']%>
+                        </li>
+            <% for(var field in tweeter._doc){%>
+                <% if((tweeter._doc[field]!='')&&(hard_fields.indexOf(field)==-1)){%>
+            <li>
+                <label><%=field%></label> <%=tweeter._doc[field]%>
+            </li>
+            <%}%>
+            <%}%>
+        </ul>
+    </div>
+</div>

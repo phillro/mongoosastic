@@ -16,12 +16,21 @@
             <% for(var i=0;i<publications.length;i++){%>
             <li style="margin-bottom: 5px">
                 <div>
-                    <a href="/publications/show/<%=publications[i]._id%>"><%=publications[i].pub_name%></a><br>
+                    <a href="/publications/show/<%=publications[i]._id%>"><%=publications[i].pub_name%></a>
+                    <a href="/publications/edit/<%=publications[i]._id%>">Edit</a>
+                    <br>
                     <%=publications[i].host_name%><br>
                     <% if(typeof publications[i].whist_list_status != 'undefined'){%>
-                    <%=publications[i].whist_list_status%><br>
+
+                    <% for(var statusName in schemas.PublicationWhiteListStatus){
+                                        if(schemas.PublicationWhiteListStatus[statusName]==publications[i].whist_list_status){%>
+                                            <%=statusName%><br>
+                                        <%}
+                                        }
+                                    %>
+
                     <%}%>
-                    <a href="/publications/edit/<%=publications[i]._id%>">Edit</a><br>
+
                 </div>
             </li>
             <%}%>

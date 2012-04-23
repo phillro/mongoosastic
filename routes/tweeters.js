@@ -32,13 +32,24 @@ exports.tweetersList = function (req, res) {
 
 exports.tweeterShow = function (req, res) {
     var _id = req.params.id
-    models.Tweeter.findById(_id, function (err, result) {
+    models.Tweeter.findById(_id, function (err, tweeter) {
         if (err) {
             res.send(err)
         } else {
 
-            res.render('tweeters/tweeter_show', {
-                tweeter:result
+            models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
+                tweeter.loaded_ma_publications=[]
+                if (tweeter.ma_publications) {
+                    for (var p = 0; p < publications.length; p++) {
+                        var pid = publications[p]._id.toString()
+                        if (tweeter.ma_publications.indexOf(pid) > -1) {
+                            tweeter.loaded_ma_publications.push(publications[p])
+                        }
+                    }
+                }
+                res.render('tweeters/tweeters_show.ejs', {
+                    tweeter:tweeter
+                })
             })
         }
     })
@@ -48,24 +59,92 @@ exports.tweeterNew = function (req, res) {
     res.render('tweeter_new', {})
 };
 
-exports.tweeterSave = function (req, res) {
-    if (req.body._id == '' || (typeof req.body._id == undefined))
-        delete req.body._id
-    var tweeter = new models.Tweeter(req.body)
-    tweeter.save(function (err, result) {
+
+exports.tweeterEdit = function (req, res) {
+    var _id = req.params.id
+    models.Tweeter.findById(_id, function (err, tweeter) {
         if (err) {
             res.send(err)
-            console.log(err)
         } else {
-            var _id=result._id
-            maHelper.updateTweeterProfile(result,function(err,result){
-                if(err){
-                    res.send(err)
-                }else{
-                    res.redirect('/tweeters/show/' + _id)
+            models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
+                if (tweeter.ma_publications) {
+                    for (var p = 0; p < publications.length; p++) {
+                        var pid = publications[p]._id.toString()
+                        if (tweeter.ma_publications.indexOf(pid) > -1) {
+                            publications[p].selected = true
+                        }
+                    }
                 }
+                res.render('tweeters/tweeters_new', {
+                    tweeter:tweeter,
+                    publications:publications,
+                    page_name:'Edit'
+                })
             })
-
         }
     })
+};
+
+exports.tweeterNew = function (req, res) {
+    models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
+        res.render('tweeters/tweeters_new', {
+            page_name:'Create',
+            publications:publications,
+            tweeter:{}
+        })
+    })
+};
+
+exports.tweeterSave = function (req, res) {
+    var tweeter
+
+
+    if (req.body._id == '' || (typeof req.body._id == undefined)) {
+        //its a new tweeter
+        delete req.body._id
+        tweeter = new models.Tweeter(req.body)
+        tweeter.save(function (err, result) {
+            if (err) {
+                res.send(err)
+                console.log(err)
+            } else {
+                var _id = result._id
+                maHelper.updateTweeterProfile(result, function (err, result) {
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.redirect('/tweeters/show/' + _id)
+                    }
+                })
+
+            }
+        })
+    }
+
+    else {
+        //editting existing
+        models.Tweeter.findById(req.body._id, function (error, tweeter) {
+            for (var field in req.body) {
+                if (field != '_id') {
+                    tweeter._doc[field] = req.body[field]
+                    tweeter.markModified(field)
+                }
+            }
+            tweeter.save(function (err, result) {
+                if (err) {
+                    res.render('tweeters/tweeters_new', {
+                        page_name:'Create',
+                        tweeter:{},
+                        errors:{
+                            'Error saving':error
+                        }
+                    })
+                } else {
+                    res.redirect('/tweeters/show/' + tweeter._id)
+                }
+            })
+        });
+    }
+
+
 };

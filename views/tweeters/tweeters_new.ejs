@@ -1,0 +1,34 @@
+<div>
+    <div>
+        <h2><%=page_name%> New Tweeter</h2>
+        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
+    </div>
+    <br>
+
+    <div>
+        <form method="post" action="/tweeters/save">
+            <%if(typeof errors !='undefined'){%>
+            <%- partial('../form_parts/errors.ejs',{errors:errors})%>
+            <%}%>
+            <ul  class="form_list">
+                <li><label>Screen Name</label><input name="screen_name"  value="<%=tweeter.screen_name||''%>"/></li>
+                <li><label>Full Name</label><input name="name" value="<%=tweeter.name||''%>"/></li>
+                <li><label>MA About</label><textarea name="ma_about" ><%=tweeter.ma_about||''%></textarea></li>
+                <li>
+                    <label>Publications</label>
+                    <select  multiple="multiple" name="ma_publications">
+                        <%for(var p=0;p<publications.length;p++){%>
+                            <%
+
+                                    var selected = publications[p].selected ? "selected":""
+                            %>
+                            <option <%=selected%> value="<%=publications[p]._id%>"><%=publications[p].pub_name%></option>
+                        <%}%>
+                    </select>
+                </li>
+                <input type="hidden" name="_id" value="<%=tweeter._id||''%>">
+                <li><input class="submit_btn" type="submit" value="Save"></li>
+            </ul>
+        </form>
+    </div>
+</div>

@@ -31,10 +31,16 @@
                 
                 <li><label>Description</label><textarea name="description"><%=publication.description||''%></textarea></li>
                 <li><label>White/Black List Status</label>
+
                     <select name="whist_list_status">
-                      <option value="0">Unkown</option>
-                      <option value="1">White List</option>
-                      <option value="2">Black List</option>
+                        <% var selected = publication.whist_list_status.toString()=="0" ? "selected":""%>
+                      <option <%=selected%> value="0">Unkown</option>
+
+                        <% var selected = publication.whist_list_status.toString()=="1" ? "selected":""%>
+                      <option <%=selected%> value="1">White List</option>
+
+                        <% var selected = publication.whist_list_status.toString()=="2" ? "selected":""%>
+                      <option <%=selected%> value="2">Black List</option>
                     </select>
 
                 </li>

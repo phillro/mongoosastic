@@ -149,13 +149,18 @@ var sourceContent = require('./routes/sourceContent')
 var publications = require('./routes/publications')
 
 app.get('/articles/list', articles.articlesList);
+
 app.get('/sourcecontent/show/:id', sourceContent.sourcecontentShow);
 app.get('/sourcecontent/show/:id/body', sourceContent.sourcecontentShowBody);
 app.get('/sourcecontent/list', sourceContent.sourcecontentList);
+
 app.get('/tweeters/list', tweeters.tweetersList);
 app.get('/tweeters/show/:id', tweeters.tweeterShow);
 app.get('/tweeters/create', tweeters.tweeterNew);
-app.post('/tweeters/save', publications.tweeterSave);
+app.get('/tweeters/edit/:id', tweeters.tweeterEdit);
+app.post('/tweeters/save', tweeters.tweeterSave);
+
+
 app.get('/publications/list', publications.publicationsList);
 app.get('/publications/show/:id', publications.publicationShow);
 app.get('/publications/create', publications.publicationNew);
