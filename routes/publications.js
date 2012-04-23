@@ -33,13 +33,18 @@ exports.publicationsList = function (req, res) {
 
 exports.publicationShow = function (req, res) {
     var _id = req.params.id
-    models.Publication.findById(_id, function (err, result) {
+
+    models.Publication.findById(_id, function (err, publication) {
         if (err) {
             res.send(err)
         } else {
+            models.Tweeter.find({ma_publications:_id},function(err,tweeters){
 
             res.render('publications/publications_show', {
-                publication:result
+                publication:publication,
+                tweeters:tweeters||[]
+
+            })
             })
         }
     })

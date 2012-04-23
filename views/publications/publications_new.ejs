@@ -33,16 +33,26 @@
                 <li><label>White/Black List Status</label>
 
                     <select name="whist_list_status">
-                        <% if(publication.whist_list_status){%>
-                        <% var selected = publication.whist_list_status.toString()=="0" ? "selected":""%>
-                      <option <%=selected%> value="0">Unkown</option>
+                        <%
+                        var selected=false
+                        if(publication.whist_list_status){
+                            selected=publication.whist_list_status.toString()
+                        }%>
 
-                        <% var selected = publication.whist_list_status.toString()=="1" ? "selected":""%>
-                      <option <%=selected%> value="1">White List</option>
+                       <%
+                       var optionSelected=""
+                        if(selected==0){ optionSelected="selected"} else optionSelected=""%>
 
-                        <% var selected = publication.whist_list_status.toString()=="2" ? "selected":""%>
-                      <option <%=selected%> value="2">Black List</option>
-                        <%}%>
+                      <option <%=optionSelected%> value="0">Unkown</option>
+
+
+                        <%if(selected==1){ optionSelected="selected"} else optionSelected=""%>
+                      <option <%=optionSelected%> value="1">White List</option>
+
+                        <%if(selected==2){ optionSelected="selected"} else optionSelected=""%>
+                      <option <%=optionSelected%> value="2">Black List</option>
+
+
                     </select>
 
                 </li>

@@ -3,7 +3,8 @@
 }
 .show_list li {
     700px;
-    margin-bottom: 15px
+    margin-bottom: 15px;
+    overflow:auto;
 }
 
 .show_list li label {

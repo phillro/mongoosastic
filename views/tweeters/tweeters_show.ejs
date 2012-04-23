@@ -25,7 +25,7 @@
             <li>
                             <label>MA Publication</label>
                 <% for(var p=0;p<tweeter.loaded_ma_publications.length;p++){%>
-                    <%=tweeter.loaded_ma_publications[p].pub_name%>,
+                    <a href="/publications/show/<%=tweeter.loaded_ma_publications[p]._id%>"><%=tweeter.loaded_ma_publications[p].pub_name%></a>,
                 <%}%>
 
             </li>

@@ -29,6 +29,17 @@
                 %>
 
             </li>
+            <li>
+                <label>Tweeters</label>
+                <% if(tweeters){%>
+                
+                 <%for(var t=0;t<tweeters.length;t++){%>
+                   <a href="/tweeters/show/<%=tweeters[t]._id%>"><%=tweeters[t].name%></a>
+                 <%}%>
+                 
+                    <%}%>
+
+            </li>
 
         </ul>
     </div>
