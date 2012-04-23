@@ -1,0 +1,7 @@
+<%if(typeof errors !='undefined'){%>
+               <ul class="error_list">
+                   <%for(var e in errors){%>
+                       <li><label><%=e%></label> <%=rrors[e]%></li>
+                   <%}%>
+               </ul>
+           <%}%>

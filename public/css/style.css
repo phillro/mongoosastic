@@ -1,0 +1,35 @@
+.show_list li {
+    700px;
+    margin-bottom: 15px
+}
+
+.show_list li label {
+    width: 200px;
+    float: left;
+    background-color: #d3d3d3;
+    margin-right: 10px;
+    font-weight: bolder;
+}
+
+.form_list li {
+    700px;
+    margin-bottom: 15px
+}
+.form_list li label {
+    width: 200px;
+    float: left;
+}
+
+.form_list li input {
+    width: 300px;
+}
+
+.form_list li textarea {
+    width: 300px;
+    height: 150px;
+}
+
+.submit_btn {
+    margin-left: 300px;
+    width: 80px !important;
+}

@@ -1,26 +1,35 @@
 <div>
     <div>
-        <h2><%=tweeter.name%></h2>
-        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
+        <h2><%-publication.pub_name||''%></h2>
+        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/publications/create">Create New</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/publications/edit/<%=publication._id%>">Edit</a></div>
     </div>
     <br>
 
     <div>
-        <ul style="list-style: none">
+        <ul style="list-style: none" class="show_list">
             <li style="margin-bottom: 5px">
-                <label>Name</label> <%=tweeter._doc['name']%>
+                <label>Publication Name</label> <%-publication._doc['pub_name']||'<i>not set</i>'%>
             </li>
             <li style="margin-bottom: 5px">
-                            <label>Screen Name</label> <%=tweeter._doc['screen_name']%>
+                            <label>Host</label> <%-publication._doc['host_name']||'<i>not set</i>'%>
             </li>
             <li style="margin-bottom: 5px">
-                                        <label>Description</label> <%=tweeter._doc['desscription']%>
+                                        <label>Description</label> <%-publication._doc['description']||'<i>not set</i>'%>
                         </li>
-            <% for(var field in tweeter._doc){%>
+
             <li style="margin-bottom: 5px">
-                <label><%=field%></label> <%=tweeter._doc[field]%>
+                <label>White List Status</label>
+                <% for(var statusName in schemas.PublicationWhiteListStatus){
+                    if(schemas.PublicationWhiteListStatus[statusName]==publication.whist_list_status){%>
+                        <%=statusName%>
+                    <%}
+                    }
+                %>
+
             </li>
-            <%}%>
+
         </ul>
     </div>
 </div>

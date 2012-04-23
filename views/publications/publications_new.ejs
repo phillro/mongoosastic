@@ -1,18 +1,45 @@
 <div>
     <div>
-        <h2>Create New Tweeter</h2>
-        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
+        <h2><%=page_name%> Publication</h2>
+            <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
+        <%if(page_name!="Create"){%>
+            <div style="float:left; margin-right: 20px"><a href="/publications/show/<%=publication._id%>">Show</a></div>
+            <div style="float:left; margin-right: 20px"><a href="/publications/create">Create New</a></div>
+        <%}else{%>
+
+
+        <%}%>
     </div>
     <br>
 
     <div>
-        <form method="post" action="/tweeters/save">
-            <ul style="list-style: none">
-                <li><label>Screen Name</label><input name="screen_name"/></li>
-                <li><label>Full Name</label><input name="name"/></li>
-                <li><label>Orginzation</label><input name="newsOrg"/></li>
-                <input type="hidden" name="_id">
-                <li><input type="submit"></li>
+        <form method="post" action="/publications/save">
+            <%if(typeof errors !='undefined'){%>
+            <%- partial('../form_parts/errors.ejs',{errors:errors})%>
+            <%}%>
+            <ul style="list-style: none" class="form_list">
+                <li><label>Publication Name</label><input name="pub_name" value="<%=publication.pub_name||''%>"/></li>
+                <li style="margin-bottom: 0px;"><label>Host</label><input name="host_name" value="<%=publication.host_name||''%>"/></li>
+                <li style="margin-top: 0px;">
+                    <label>NOTE</label>
+                    <p style="margin-bottom: 0px; margin-top: 0px;">
+                        Host names should be general enough to capture the entire publiction.
+                        For example, the WSJ should be <i>wsj.com</i> to capture both
+                        <i>blogs.wsj.com</i> and <i>www.wsj.com</i>
+                    </p>
+                </li>
+                
+                <li><label>Description</label><textarea name="description"><%=publication.description||''%></textarea></li>
+                <li><label>White/Black List Status</label>
+                    <select name="whist_list_status">
+                      <option value="0">Unkown</option>
+                      <option value="1">White List</option>
+                      <option value="2">Black List</option>
+                    </select>
+
+                </li>
+                <input type="hidden" name="_id" value="<%=publication._id||''%>">
+                <li><input class="submit_btn" type="submit" value="Save"></li>
             </ul>
         </form>
     </div>

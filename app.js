@@ -12,7 +12,6 @@ var env = cli.args.shift() || 'development'
     console.log(env)
 conf = require('./etc/conf')[env]
 var express = require('express')
-var routes = require('./routes');
 var everyauth = require('everyauth')
 var mongoose = require('mongoose')
 
@@ -22,6 +21,8 @@ var app = module.exports = express.createServer();
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
 GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
 var MediaAmpModels = require('mediaamp-models/index.js')
+GLOBAL.schemas = schemas = MediaAmpModels
+GLOBAL.models = MediaAmpModels.loadModels(modelsDb)
 GLOBAL.maHelper = new require('./lib/Helpers')(conf)
 
 var authWrapper = new require('./lib/auth')()
@@ -75,13 +76,13 @@ everyauth
 
     .loginSuccessRedirect('/sourcecontent/list')
     .registerSuccessRedirect('/');
-
+/*
 GLOBAL.models = {
     Article:mediaAmpDb.model('article', MediaAmpModels.ArticleSchema),
     SourceContent:mediaAmpDb.model('source_content', MediaAmpModels.SourceContentSchema),
     Tweet:mediaAmpDb.model('tweet', MediaAmpModels.TweeterSchema),
     Tweeter:mediaAmpDb.model('tweeter', MediaAmpModels.TweeterSchema)
-}
+}*/
 
 app.configure(function () {
     app.set('views', __dirname + '/views');
@@ -90,6 +91,7 @@ app.configure(function () {
     app.use(express.session({secret:'foo'}))
     app.use(express.bodyParser());
     app.use(express.methodOverride())
+    app.use(express.static(__dirname + '/public'));
     app.use(everyauth.middleware())
 });
 everyauth.helpExpress(app);
@@ -140,18 +142,28 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
+var index = require('./routes');
+var articles = require('./routes/articles')
+var tweeters = require('./routes/tweeters')
+var sourceContent = require('./routes/sourceContent')
+var publications = require('./routes/publications')
+
+app.get('/articles/list', articles.articlesList);
+app.get('/sourcecontent/show/:id', sourceContent.sourcecontentShow);
+app.get('/sourcecontent/show/:id/body', sourceContent.sourcecontentShowBody);
+app.get('/sourcecontent/list', sourceContent.sourcecontentList);
+app.get('/tweeters/list', tweeters.tweetersList);
+app.get('/tweeters/show/:id', tweeters.tweeterShow);
+app.get('/tweeters/create', tweeters.tweeterNew);
+app.post('/tweeters/save', publications.tweeterSave);
+app.get('/publications/list', publications.publicationsList);
+app.get('/publications/show/:id', publications.publicationShow);
+app.get('/publications/create', publications.publicationNew);
+app.get('/publications/edit/:id', publications.publicationEdit);
+app.post('/publications/save', publications.publicationSave);
 
 
-app.get('/articles/list', routes.articlesList);
-app.get('/sourcecontent/show/:id', routes.sourcecontentShow);
-app.get('/sourcecontent/show/:id/body', routes.sourcecontentShowBody);
-app.get('/sourcecontent/list', routes.sourcecontentList);
-app.get('/tweeters/list', routes.tweetersList);
-app.get('/tweeters/show/:id', routes.tweeterShow);
-app.get('/tweeters/create', routes.tweeterNew);
-app.post('/tweeters/save', routes.tweeterSave);
-
-app.get('/', routes.index);
+app.get('/', index.index);
 
 
 app.listen(3000);

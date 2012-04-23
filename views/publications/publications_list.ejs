@@ -1,24 +1,27 @@
 <div>
     <div>
-        <h2>Tweeter List</h2>
+        <h2>Publication List</h2>
         <%if(previous>=0){%>
-        <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=<%=previous%>">Previous</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>">Previous</a></div>
         <%}%>
-        <div style="float:left"><a href="/tweeters/list?start=<%=start%>">Next</a></div>
+        <div style="float:left"><a href="/publications/list?start=<%=start%>">Next</a></div>
     </div>
     <br>
-    <div>
-        <div style="float:left; margin-right: 20px"><a href="/tweeters/create">New</a></div>
-    </div>
+        <div>
+            <div style="float:left; margin-right: 20px"><a href="/publications/create">Create New</a></div>
+        </div>
     <br>
     <div>
         <ul style="list-style: none">
-            <% for(var i=0;i<tweeters.length;i++){%>
+            <% for(var i=0;i<publications.length;i++){%>
             <li style="margin-bottom: 5px">
                 <div>
-                    <a href="/tweeters/show/<%=tweeters[i]._id%>"><%=tweeters[i].name%></a><br>
-                    <%=tweeters[i].screen_name%><br>
-                    <%=tweeters[i].description%><br>
+                    <a href="/publications/show/<%=publications[i]._id%>"><%=publications[i].pub_name%></a><br>
+                    <%=publications[i].host_name%><br>
+                    <% if(typeof publications[i].whist_list_status != 'undefined'){%>
+                    <%=publications[i].whist_list_status%><br>
+                    <%}%>
+                    <a href="/publications/edit/<%=publications[i]._id%>">Edit</a><br>
                 </div>
             </li>
             <%}%>
