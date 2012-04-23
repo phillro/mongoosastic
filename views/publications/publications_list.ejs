@@ -1,6 +1,7 @@
 <div>
     <div>
         <h2>Publication List</h2>
+        <div>Showing 20 of <%=total%></div>
         <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
         <%if(previous>=0){%>
         <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>">Previous</a></div>
@@ -13,6 +14,20 @@
         </div>
     <br>
     <div>
+        <div class="filters">
+            Filter:
+            <select id="filter_whist_list_status" name="whist_list_status">
+                <option value=-1>None</option>
+            <% for(var statusName in schemas.PublicationWhiteListStatus){
+                var selected=""
+                if(filter['whist_list_status']==schemas.PublicationWhiteListStatus[statusName])
+                    selected="selected"
+                %>
+                <option <%=selected%> value="<%=schemas.PublicationWhiteListStatus[statusName]%>"><%=statusName%></option>
+            <%}%>
+            </select>
+        </div>
+
         <ul style="list-style: none">
             <% for(var i=0;i<publications.length;i++){%>
             <li style="margin-bottom: 5px">
@@ -38,3 +53,16 @@
         </ul>
     </div>
 </div>
+        <script>
+            $('#filter_whist_list_status').change(function() {
+                $("#filter_whist_list_status option:selected").each(function () {
+                    var filter = {}
+                    filter[this.parentNode.name]=parseInt(this.value)
+                    if(this.value==-1)
+                        window.location="/publications/list?start=0"
+                    else
+                        window.location="/publications/list?start=0&filter="+JSON.stringify(filter)
+                });
+
+            });
+        </script>
