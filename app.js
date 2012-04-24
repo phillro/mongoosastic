@@ -22,7 +22,7 @@ var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mon
 GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
 var MediaAmpModels = require('mediaamp-models/index.js')
 GLOBAL.schemas = schemas = MediaAmpModels
-GLOBAL.models = MediaAmpModels.loadModels(modelsDb)
+GLOBAL.models = MediaAmpModels.loadModels(modelsDb,schemas)
 GLOBAL.maHelper = new require('./lib/Helpers')(conf)
 
 var authWrapper = new require('./lib/auth')()
@@ -96,7 +96,8 @@ app.configure(function () {
 });
 everyauth.helpExpress(app);
 
-app.all('/sourcecontent/*',function(req,res, next){
+//Protect the paths
+app.all(/^\/(tweeters|articles|publications|sourcecontent|)\/.*/,function(req,res, next){
     if(env=='production'){
     if(req.session.auth){
         if(req.session.auth.loggedIn)
@@ -108,34 +109,6 @@ app.all('/sourcecontent/*',function(req,res, next){
         next()
     }
 })
-
-app.all('/tweeters/*',function(req,res, next){
-    if(env=='production'){
-    if(req.session.auth){
-        if(req.session.auth.loggedIn)
-            next()
-    }
-    else
-        res.redirect('/login')
-    }else{
-        next()
-    }
-})
-
-app.all('/articles/*',function(req,res, next){
-    //if(env=='production'){
-        if(true){
-    if(req.session.auth){
-        if(req.session.auth.loggedIn)
-            next()
-    }
-    else
-        res.redirect('/login')
-    }else{
-        next()
-    }
-})
-
 
 app.get('/logout', function (req, res) {
     req.logout();
@@ -147,6 +120,12 @@ var articles = require('./routes/articles')
 var tweeters = require('./routes/tweeters')
 var sourceContent = require('./routes/sourceContent')
 var publications = require('./routes/publications')
+var expertises = require('./routes/expertises')
+
+
+app.get('/expertises/list', expertises.expertisesList);
+app.get('/expertises/show/:id', expertises.expertisesShow);
+app.post('/expertises/save', expertises.expertisesSave);
 
 app.get('/articles/list', articles.articlesList);
 

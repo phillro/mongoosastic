@@ -1,0 +1,13 @@
+
+    <%for(var e=0;e<expertises.length;e++){%>
+        <li id="expertise_node_<%=expertises[e]._id%>" class="expertise_node">
+            <span class="folder"><%=expertises[e].name%></span>
+            <%if(typeof expertises[e].children!='undefined'){%>
+                <%if(expertises[e].children.length>0){%>
+                    <ul>
+                        <%-partial('expertise_node.ejs',{expertises:expertises[e].children})%>
+                    </ul>
+                <%}%>
+            <%}%>
+        </li>
+    <%}%>

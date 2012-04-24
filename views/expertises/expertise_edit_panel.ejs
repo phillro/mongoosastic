@@ -1,0 +1,17 @@
+<ul  class="form_list">
+    <li><label></label><input name="child_expertise_name" id="child_expertise_name"/> <button class="add_child_expertise_button" id="add_child_expertise_<%=expertise._id%>">Add Child Expertise</button></li>
+             <li><label>Name</label><input name="name"  value="<%=expertise.name||''%>"/></li>
+             <li><label>Description</label><textarea name="description" ><%=expertise.description||''%></textarea></li>
+
+
+             <li>
+                 <label>Tweeters</label>
+                 <select multiple>
+
+                 </select>
+             </li>
+    <li>
+        <button  style="margin-left: 100px;" id="update_expertise">Save</button>
+    </li>
+
+    </ul>

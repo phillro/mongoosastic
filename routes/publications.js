@@ -13,8 +13,8 @@ exports.publicationsList = function (req, res) {
     var filter = req.query.filter || {}
     if (typeof filter == 'string')
         filter = JSON.parse(filter)
-    if (filter.whist_list_status) {
-        filter.whist_list_status = filter.whist_list_status.toString()
+    if (filter.white_list_status) {
+        filter.white_list_status = filter.white_list_status.toString()
     }
 
 
@@ -23,6 +23,8 @@ exports.publicationsList = function (req, res) {
     previous = (start - perpage) > 0 ? start - perpage : 0
 
     models.Publication.count(function (countError, count) {
+        console.log({white_list_status:"1"})
+        console.log(filter)
         models.Publication.find(filter).skip(start).limit(perpage).sort('createdAt', 'descending').execFind(function (err, results) {
             if (err) {
                 res.send(err)
@@ -48,12 +50,15 @@ exports.publicationShow = function (req, res) {
             res.send(err)
         } else {
             models.Tweeter.find({ma_publications:_id}, function (err, tweeters) {
+                if (req.query.ajax) {
 
-                res.render('publications/publications_show', {
-                    publication:publication,
-                    tweeters:tweeters || []
+                } else {
+                    res.render('publications/publications_show', {
+                        publication:publication,
+                        tweeters:tweeters || []
 
-                })
+                    })
+                }
             })
         }
     })
@@ -101,7 +106,11 @@ exports.publicationSave = function (req, res) {
                     if (err) {
                         res.send(err)
                     } else {
-                        res.redirect('/publications/show/' + _id)
+                        if (req.query.ajax) {
+                            res.send({success:true})
+                        } else {
+                            res.redirect('/publications/show/' + _id)
+                        }
                     }
                 })
 
@@ -114,8 +123,17 @@ exports.publicationSave = function (req, res) {
         models.Publication.findById(req.body._id, function (error, publication) {
             for (var field in req.body) {
                 if (field != '_id') {
-                    publication._doc[field] = req.body[field]
-                    publication.markModified(field)
+
+                    if (field == 'white_list_status') {
+                        try {
+                            publication.white_list_status = parseInt(req.body[field])
+                        } catch (ex) {
+                        }
+                    } else {
+                        publication._doc[field] = req.body[field]
+                        publication.markModified(field)
+
+                    }
                 }
             }
             publication.save(function (err, result) {
@@ -128,7 +146,11 @@ exports.publicationSave = function (req, res) {
                         }
                     })
                 } else {
-                    res.redirect('/publications/show/' + publication._id)
+                    if (req.query.ajax) {
+                        res.send({success:true})
+                    } else {
+                        res.redirect('/publications/show/' + publication._id)
+                    }
                 }
             })
         });

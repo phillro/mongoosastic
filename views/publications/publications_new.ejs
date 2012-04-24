@@ -32,11 +32,11 @@
                 <li><label>Description</label><textarea name="description"><%=publication.description||''%></textarea></li>
                 <li><label>White/Black List Status</label>
 
-                    <select name="whist_list_status">
+                    <select name="white_list_status">
                         <%
                         var selected=false
-                        if(publication.whist_list_status){
-                            selected=publication.whist_list_status.toString()
+                        if(publication.white_list_status){
+                            selected=publication.white_list_status.toString()
                         }%>
 
                        <%

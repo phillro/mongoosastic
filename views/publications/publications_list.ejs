@@ -4,9 +4,9 @@
         <div>Showing 20 of <%=total%></div>
         <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
         <%if(previous>=0){%>
-        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>">Previous</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>&filter=<%=JSON.stringify(filter)%>">Previous</a></div>
         <%}%>
-        <div style="float:left"><a href="/publications/list?start=<%=start%>">Next</a></div>
+        <div style="float:left"><a href="/publications/list?start=<%=start%>&filter=<%=JSON.stringify(filter)%>">Next</a></div>
     </div>
     <br>
         <div>
@@ -16,17 +16,20 @@
     <div>
         <div class="filters">
             Filter:
-            <select id="filter_whist_list_status" name="whist_list_status">
+            <select id="filter_white_list_status" name="white_list_status">
                 <option value=-1>None</option>
             <% for(var statusName in schemas.PublicationWhiteListStatus){
                 var selected=""
-                if(filter['whist_list_status']==schemas.PublicationWhiteListStatus[statusName])
+                if(filter['white_list_status']==schemas.PublicationWhiteListStatus[statusName])
                     selected="selected"
                 %>
                 <option <%=selected%> value="<%=schemas.PublicationWhiteListStatus[statusName]%>"><%=statusName%></option>
             <%}%>
             </select>
+            <!--<input id="filter_name" name="filter_name">
+            <button id="filter_update">Search</button>-->
         </div>
+
 
         <ul style="list-style: none">
             <% for(var i=0;i<publications.length;i++){%>
@@ -36,17 +39,18 @@
                     <a href="/publications/edit/<%=publications[i]._id%>">Edit</a>
                     <br>
                     <%=publications[i].host_name%><br>
-                    <% if(typeof publications[i].whist_list_status != 'undefined'){%>
-
+                    <div class="white_list_checkboxes">
+                        White List Status
                     <% for(var statusName in schemas.PublicationWhiteListStatus){
-                                        if(schemas.PublicationWhiteListStatus[statusName]==publications[i].whist_list_status){%>
-                                            <%=statusName%><br>
-                                        <%}
-                                        }
+                                    var selected=""
+                        if(schemas.PublicationWhiteListStatus[statusName]==publications[i].white_list_status)
+                                        selected="checked=\"checked\""
                                     %>
+                        <input class="white_list_status_checkbox" type="radio" <%-selected%> name="<%=publications[i]._id%>_white_list_status" value="<%=schemas.PublicationWhiteListStatus[statusName]%>" /> <%=statusName%>
 
-                    <%}%>
-
+                                <%}%>
+                    </div>
+                    <div id="<%=publications[i]._id%>_update_result"></div>
                 </div>
             </li>
             <%}%>
@@ -54,8 +58,8 @@
     </div>
 </div>
         <script>
-            $('#filter_whist_list_status').change(function() {
-                $("#filter_whist_list_status option:selected").each(function () {
+            $('#filter_white_list_status').change(function() {
+                $("#filter_white_list_status option:selected").each(function () {
                     var filter = {}
                     filter[this.parentNode.name]=parseInt(this.value)
                     if(this.value==-1)
@@ -65,4 +69,41 @@
                 });
 
             });
+
+            $('.white_list_status_checkbox').click(function(ev){
+                var white_list_status=$("[name='"+this.name+"']:checked").val()
+                var publicationId = this.name.replace('_white_list_status','')
+                var data =  {
+                    _id:publicationId,
+                    white_list_status:white_list_status
+                }
+
+                $.ajax({
+                  type: 'POST',
+                  url: '/publications/save?ajax=true',
+                  data: data,
+                  success: function(){
+                    $('#'+publicationId+'_update_result').html('Updated.')
+                  },
+                  dataType: JSON
+                });
+            })
+            /*
+
+            $('#filter_update').click(function(){
+                var filter = {}
+                var filterFound=false
+                filter['filter_name'] = $('#filter_name').val()
+                $("#filter_white_list_status option:selected").each(function () {
+                    filter[this.parentNode.name]=parseInt(this.value)
+                    filterFound=true
+                });
+                if(!filterFound)
+                    window.location="/publications/list?start=0"
+                else
+                    window.location="/publications/list?start=0&filter="+JSON.stringify(filter)
+
+            })
+*/
+
         </script>

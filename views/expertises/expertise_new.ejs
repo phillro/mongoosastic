@@ -1,0 +1,53 @@
+/**
+ * User: philliprosen
+ * Date: 4/23/12
+ * Time: 6:54 PM
+ */
+<div>
+    <div>
+        <h2><%=page_name%> Publication</h2>
+            <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
+        <%if(page_name!="Create"){%>
+            <div style="float:left; margin-right: 20px"><a href="/publications/show/<%=publication._id%>">Show</a></div>
+            <div style="float:left; margin-right: 20px"><a href="/publications/create">Create New</a></div>
+        <%}else{%>
+
+
+        <%}%>
+    </div>
+    <br>
+
+    <div>
+        <form method="post" action="/publications/save">
+            <%if(typeof errors !='undefined'){%>
+            <%- partial('../form_parts/errors.ejs',{errors:errors})%>
+            <%}%>
+            <ul style="list-style: none" class="form_list">
+                <li><label>Expertise Name</label><input name="name" value="<%=expertise.name||''%>"/></li>
+                <li><label>Description</label><textarea name="description"><%=expertise.description||''%></textarea></li>
+                <li>
+                    <label>Children</label>
+                    <div class="experises_panel">
+                        <select class="expertises_select" id="<%=expertise._id%>_children">
+                            <%if(expertise.children){%>
+                                <%for(var c=0;c<expertise.children.length;c++){%>
+                                    <option value="<%=expertise[c].children._id%>"><%=expertise[c].children.name%></option>
+                                <%}%>
+                        </select>
+                        <button>Remove Selected</button>
+                        <input name="child"/><button>Add Child</button>
+                    </div>
+                </li>
+                <li style="margin-top: 0px;">
+
+
+                </li>
+
+
+
+                <input type="hidden" name="_id" value="<%=expertise._id||''%>">
+                <li><input class="submit_btn" type="submit" value="Save"></li>
+            </ul>
+        </form>
+    </div>
+</div>
