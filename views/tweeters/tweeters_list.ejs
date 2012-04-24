@@ -1,7 +1,7 @@
 <div>
     <div>
         <h2>Tweeter List</h2>
-        <div>Showing 20 of <%=total%></div>
+        <div>Showing <%=start-20%> to <%= start%> of <%=total%></div>
         <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=0">Home</a></div>
         <%if(previous>=0){%>
         <div style="float:left; margin-right: 20px"><a href="/tweeters/list?start=<%=previous%>">Previous</a></div>

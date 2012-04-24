@@ -1,7 +1,7 @@
 <div>
     <div>
         <h2>Publication List</h2>
-        <div>Showing 20 of <%=total%></div>
+        <div>Showing <%=start-20%> to <%= start%> of <%=total%></div>
         <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
         <%if(previous>=0){%>
         <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>&filter=<%=JSON.stringify(filter)%>">Previous</a></div>
