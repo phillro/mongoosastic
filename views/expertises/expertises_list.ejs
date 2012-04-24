@@ -1,88 +1,130 @@
-<script src="/js/jquery.treeview.js" type="text/javascript"></script>
-<script src="/js/jquery.treeview.edit.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/css/jquery.treeview.css" />
 <div>
     <div>
         <h2>Expertise List</h2>
     </div>
     <br>
-        <div>
-        </div>
+
+    <div>
+    </div>
     <br>
+
     <div>
         <div class="filters">
         </div>
-        <div>
-            <input name="root_expertise_name" id="root_expertise_name"/> <button id="add_root_expertise">Add Root Expertise</button>
-        </div>
         <hr>
-        <div id="tree_panel" style="float: left;margin-right: 100; padding-right:10px;border-right:1px solid;">
-        <%-partial('expertise_tree',{expertises:expertises})%>
+        <div style="float: left;padding-right:10px;border-right:1px solid;">
+            <div>
+                <input name="root_expertise_name" id="root_expertise_name"/>
+                <button id="add_root_expertise">Add Root Expertise</button>
+            </div>
+            <div id="tree_panel" style="min-height: 450px;" >
+
+                <%-partial('expertise_tree',{expertises:expertises})%>
+            </div>
+
         </div>
+
         <div id="expertise_details" style="margin-top:10px;">
 
         </div>
     </div>
 </div>
 <script type="text/javascript">
-	$(function() {
+    $(function () {
 
-        function addExpertise(expertiseData,addExpertiseCallback){
+        function deleteExpertise(expertiseId,deleteExpertiseCallback){
             $.ajax({
-              type: 'POST',
-              url: '/expertises/save?ajax=true',
-              data: expertiseData,
-              success: function(data){
-                  if(typeof addExpertiseCallback=='function')
-                  addExpertiseCallback(data)
-              }
+                type:'DELETE',
+                url:'/expertises/del/'+expertiseId+'?ajax=true',
+                success:function (data) {
+                    if (typeof deleteExpertiseCallback == 'function')
+                        deleteExpertiseCallback(data)
+                }
             });
         }
 
-        function getExpertise(expertiseId,callback){
-            $.get('/expertises/show/'+expertiseId+'?ajax=true',function(data){
+        function saveExpertise(expertiseData, saveExpertiseCallback) {
+            $.ajax({
+                type:'POST',
+                url:'/expertises/save?ajax=true',
+                data:expertiseData,
+                success:function (data) {
+                    if (typeof saveExpertiseCallback == 'function')
+                        saveExpertiseCallback(data)
+                }
+            });
+        }
 
-                $('.add_child_expertise_button').click(function(){
-                    var parentId=this.id.replace('add_child_expertise_','')
-                        var expertise= {
-                            parentId:parentId,
-                            name:$('#child_expertise_name').val()
-                        }
-                        addExpertise(expertise,function(addResponse){
-                            refreshExpertiseTree()
-                        })
-                })
-                if(typeof callback=='function')
-                callback(data)
+        function getExpertise(expertiseId, callback) {
+            $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+                if (typeof callback == 'function')
+                    callback(data)
             })
         }
 
 
-
-        function refreshExpertiseTree(callback){
-            $.get('/expertises/list?ajax=true',function(data){
+        function refreshExpertiseTree(callback) {
+            $.get('/expertises/list?ajax=true', function (data) {
                 $('#tree_panel').empty();
                 $('#tree_panel').html(data)
-                $('.expertise_node').click(function(){
-                            var expertiseId=this.id.replace('expertise_node_','')
-                            getExpertise(expertiseId,function(data){
+                $("#browser").treeview({
+                    toggle:function () {
 
-                            })
-                                $.get('/expertises/show/'+expertiseId+'?ajax=true',function(data){
-                                    $('#expertise_details').html(data)
-                                })
-                        })
+                    }
+                });
+                $('#add_root_expertise').click(function () {
+                    var data = {
+                        name:$('#root_expertise_name').val(),
+                        is_root:true
+                    }
+                    saveExpertise(data, function () {
+                        refreshExpertiseTree()
+                    })
+                })
 
-                        $('#add_root_expertise').click(function () {
-                            var data = {
-                                name:$('#root_expertise_name').val()
-                            }
-                            addExpertise(data,function(){
+
+                $('.expertise_node_lnk').click(function () {
+                    var expertiseId = this.id.replace('expertise_node_', '')
+                    //getExpertise(expertiseId, function (data) {})
+                    $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+                        $('#expertise_details').html(data)
+                        $('#delete_expertise').click(function () {
+                            var expertiseIdDiv = $('.expertise_id')[0]
+                            var _id = expertiseIdDiv.id.replace('expertise_id_', '')
+                            deleteExpertise(_id,function(){
                                 refreshExpertiseTree()
                             })
                         })
-                if(typeof callback=='function')
-                callback(data)
+                        $('#update_expertise').click(function () {
+                            var expertiseIdDiv = $('.expertise_id')[0]
+                            var _id = expertiseIdDiv.id.replace('expertise_id_', '')
+
+                            var data = {
+                                _id:_id,
+                                name:$('#expertise_name').val()
+                            }
+                            saveExpertise(data, function () {
+                                refreshExpertiseTree()
+                            })
+                        })
+                        $('.add_child_expertise_button').click(function () {
+                            var expertiseIdDiv = $('.expertise_id')[0]
+                            var parentId = expertiseIdDiv.id.replace('expertise_id_', '')
+                            var expertise = {
+                                parentId:parentId,
+                                name:$('#child_expertise_name').val()
+                            }
+                            saveExpertise(expertise, function (addResponse) {
+                                refreshExpertiseTree()
+                                $('#child_expertise_name').val('')
+                            })
+                        })
+                    })
+                })
+
+
+                if (typeof callback == 'function')
+                    callback(data)
             })
         }
 

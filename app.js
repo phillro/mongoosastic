@@ -126,6 +126,7 @@ var expertises = require('./routes/expertises')
 app.get('/expertises/list', expertises.expertisesList);
 app.get('/expertises/show/:id', expertises.expertisesShow);
 app.post('/expertises/save', expertises.expertisesSave);
+app.del('/expertises/del/:id', expertises.expertisesDelete);
 
 app.get('/articles/list', articles.articlesList);
 
