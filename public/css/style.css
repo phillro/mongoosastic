@@ -23,6 +23,10 @@
     width:700px;
     margin-bottom: 15px
 }
+
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+
+
 .form_list li label {
     width: 200px;
     float: left;

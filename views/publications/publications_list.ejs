@@ -41,8 +41,8 @@
                 <div>
                     <div style="float:right;">
                     <a href="/publications/show/<%=publications[i]._id%>" class="ro_field">Details</a>
+    <a href="" class="del_lnk" id="delete_pub_<%=publications[i]._id%>">DELETE</a>
 
-                        <a href="/publications/delete/<%=publications[i]._id%>" class="ro_field">Delete</a>
                     </div>
                     <h3>
                         <div class="ro_field"><%=publications[i].host_name%></div>
@@ -80,7 +80,16 @@
 
         </ul>
     </div>
+    <div style="margin-bottom: 20px;">
+        <div>Showing <%=start-20%> to <%= start%> of <%=total%></div>
+        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=0">Home</a></div>
+        <%if(previous>=0){%>
+        <div style="float:left; margin-right: 20px"><a href="/publications/list?start=<%=previous%>&filter=<%=JSON.stringify(filter)%>">Previous</a></div>
+        <%}%>
+        <div style="float:left"><a href="/publications/list?start=<%=start%>&filter=<%=JSON.stringify(filter)%>">Next</a></div>
+    </div>
 </div>
+        <Br><br>
         <script>
             $('#filter_white_list_status').change(function() {
                 $("#filter_white_list_status option:selected").each(function () {
@@ -113,14 +122,12 @@
                 });
             })
 
-                    $('.edit_pub_name').click(function(ev){
-                        var _id= this.id.replace('edit_','')
-                    })
 
                     $('.edit_lnk').click(function(ev){
                         $('.editable').show();
                         $('.edit_lnk').hide();
                         $('.ro_field').hide();
+                        ev.preventDefault()
                     })
 
                     $('.save_lnk').click(function(ev){
@@ -147,11 +154,23 @@
                                 dataType:JSON
                             });
                         })
-                        alert('Saved. Probably.')
                         $('.editable').hide();
                         $('.edit_lnk').show();
                         $('.ro_field').show();
+                        location.reload();
+                        ev.preventDefault()
                     })
+
+            $('.del_lnk').click(function (ev) {
+
+                var id = this.id.replace('delete_pub_', '')
+                    var delUrl='/publications/delete/' + id + '?ajax=true'
+
+                $.get(delUrl, function (data) {
+                    location.reload()
+                })
+                ev.preventDefault()
+            })
             /*
 
             $('#filter_update').click(function(){

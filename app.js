@@ -143,6 +143,8 @@ app.post('/tweeters/save', tweeters.tweeterSave);
 
 app.get('/publications/list', publications.publicationsList);
 app.get('/publications/show/:id', publications.publicationShow);
+app.del('/publications/delete/:id', publications.publicationDelete);
+app.get('/publications/delete/:id', publications.publicationDelete);
 app.get('/publications/create', publications.publicationNew);
 app.get('/publications/edit/:id', publications.publicationEdit);
 app.post('/publications/save', publications.publicationSave);
