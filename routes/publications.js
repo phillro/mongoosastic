@@ -64,6 +64,24 @@ exports.publicationShow = function (req, res) {
     })
 };
 
+exports.publicationDelete = function (req, res) {
+    var _id = req.params.id
+
+    models.Publication.findById(_id, function (err, publication) {
+        if (err) {
+            res.send(err)
+        } else {
+            publication.remove(function(err,result){
+                if (req.query.ajax) {
+                res.send({success:true})
+                } else {
+                   res.redirect('/publications/list')
+                }
+            })
+        }
+    })
+};
+
 exports.publicationEdit = function (req, res) {
     var _id = req.params.id
     models.Publication.findById(_id, function (err, result) {
