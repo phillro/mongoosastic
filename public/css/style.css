@@ -20,7 +20,7 @@
 }
 
 .form_list li {
-    700px;
+    width:700px;
     margin-bottom: 15px
 }
 .form_list li label {
@@ -45,4 +45,21 @@
 .submit_btn {
     margin-left: 300px;
     width: 80px !important;
+}
+
+.result_list {
+    width:500px;
+}
+.result_list li {
+    margin: 0px;
+    padding-left:5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+
+}
+
+.result_list li:nth-child(odd) { background: #d3d3d3; }
+
+.editable {
+    display: none;
 }

@@ -31,29 +31,53 @@
         </div>
 
 
-        <ul style="list-style: none">
+        <ul style="list-style: none" class="result_list">
+            <li style="height: 10px; padding-right: 0px">
+                <div style="float: right; border-width: 1px; border-style: solid; width: 60px; background: #d3d3d3; text-align: center;" class="edit_lnk">EDIT ALL</div>
+                <div style="float: right; border-width: 1px; border-style: solid; width: 60px; background: #d3d3d3; text-align: center; display:none;" class="editable save_lnk">SAVE ALL</div>
+            </li>
             <% for(var i=0;i<publications.length;i++){%>
-            <li style="margin-bottom: 5px">
+            <li style="margin-bottom: 5px"  id="pub_<%=publications[i]._id%>" class="pub_entry">
                 <div>
-                    <a href="/publications/show/<%=publications[i]._id%>"><%=publications[i].pub_name%></a>
-                    <a href="/publications/edit/<%=publications[i]._id%>">Edit</a>
-                    <br>
-                    <%=publications[i].host_name%><br>
+                    <div style="float:right;">
+                    <a href="/publications/show/<%=publications[i]._id%>" class="ro_field">Details</a>
+
+                        <a href="/publications/delete/<%=publications[i]._id%>" class="ro_field">Delete</a>
+                    </div>
+                    <h3>
+                        <div class="ro_field"><%=publications[i].host_name%></div>
+                        <div class="editable"><input class="host_name" name="host_name" value="<%=publications[i].host_name%>"></div>
+                    </h3>
+                    <h3>
+                        <div class="ro_field"><%=publications[i].pub_name%></div>
+                        <div class="editable"><input class="pub_name" name="pub_name" value="<%=publications[i].pub_name%>"></div>
+                    </h3>
                     <div class="white_list_checkboxes">
-                        White List Status
+                        <div class="ro_field">
+                            <% for(var statusName in schemas.PublicationWhiteListStatus){
+                                if(schemas.PublicationWhiteListStatus[statusName]==publications[i].white_list_status){%>
+                                   <h3> <%=statusName%></h3>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    <div class="editable">
                     <% for(var statusName in schemas.PublicationWhiteListStatus){
                                     var selected=""
                         if(schemas.PublicationWhiteListStatus[statusName]==publications[i].white_list_status)
                                         selected="checked=\"checked\""
                                     %>
-                        <input class="white_list_status_checkbox" type="radio" <%-selected%> name="<%=publications[i]._id%>_white_list_status" value="<%=schemas.PublicationWhiteListStatus[statusName]%>" /> <%=statusName%>
+                       <input class="white_list_status_checkbox" type="radio" <%-selected%> name="<%=publications[i]._id%>_white_list_status" value="<%=schemas.PublicationWhiteListStatus[statusName]%>" /> <%=statusName%>
 
                                 <%}%>
                     </div>
+                </div>
                     <div id="<%=publications[i]._id%>_update_result"></div>
                 </div>
             </li>
             <%}%>
+            <div style="float: right; border-width: 1px; border-style: solid; width: 60px; background: #d3d3d3; text-align: center;" class="edit_lnk">EDIT ALL</div>
+            <div style="float: right; border-width: 1px; border-style: solid; width: 60px; background: #d3d3d3; text-align: center; display:none;" class="editable save_lnk">SAVE ALL</div>
+
         </ul>
     </div>
 </div>
@@ -88,6 +112,46 @@
                   dataType: JSON
                 });
             })
+
+                    $('.edit_pub_name').click(function(ev){
+                        var _id= this.id.replace('edit_','')
+                    })
+
+                    $('.edit_lnk').click(function(ev){
+                        $('.editable').show();
+                        $('.edit_lnk').hide();
+                        $('.ro_field').hide();
+                    })
+
+                    $('.save_lnk').click(function(ev){
+                        $('.pub_entry').each(function(index, pub_entry){
+                            var publicationId = pub_entry.id.replace("pub_","")
+                            var white_list_status=$(pub_entry).find(".white_list_status_checkbox:checked").val()
+                            var pub_name = $(pub_entry).find('.pub_name').val()
+                            var host_name =$(pub_entry).find('.host_name').val()
+                            if(white_list_status=='undefined')
+                                white_list_status=1
+                            var data = {
+                                _id:publicationId,
+                                white_list_status:white_list_status,
+                                host_name:host_name,
+                                pub_name:pub_name
+                            }
+                            $.ajax({
+                                type:'POST',
+                                url:'/publications/save?ajax=true',
+                                data:data,
+                                success:function () {
+                                    $('#' + publicationId + '_update_result').html('Updated.')
+                                },
+                                dataType:JSON
+                            });
+                        })
+                        alert('Saved. Probably.')
+                        $('.editable').hide();
+                        $('.edit_lnk').show();
+                        $('.ro_field').show();
+                    })
             /*
 
             $('#filter_update').click(function(){
