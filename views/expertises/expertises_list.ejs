@@ -131,9 +131,33 @@
                                 $('#child_expertise_name').val('')
                             })
                         })
-                        $( "#sortable1, #sortable2" ).sortable({
-                        			connectWith: ".connectedSortable"
-                        		}).disableSelection();
+                        $("#sortable1, #sortable2").sortable({
+                            connectWith:".connectedSortable"
+                        }).disableSelection();
+
+                        $('.availableTweeters li').dblclick(function () {
+                            var litem = $(this).clone();
+                            litem.hide().appendTo($('.selectedTweeters')).fadeIn();
+                            $(this).remove();
+                            litem.dblclick(function () {
+                                var litem = $(this).clone();
+                                litem.appendTo($('.availableTweeters'));
+                                $(this).remove();
+                            });
+                        });
+
+                        $('.selectedTweeters li').dblclick(function () {
+                            var litem = $(this).clone();
+                            litem.hide().appendTo($('.availableTweeters')).fadeIn();
+                            $(this).remove();
+                            litem.dblclick(function () {
+                                var litem = $(this).clone();
+                                litem.hide().appendTo($('.selectedTweeters')).fadeIn();
+                                $(this).remove();
+                            })
+                        });
+
+
                     })
                 })
 
