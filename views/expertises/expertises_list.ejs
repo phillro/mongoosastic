@@ -44,15 +44,21 @@
         }
 
         function saveExpertise(expertiseData, saveExpertiseCallback) {
-            $.ajax({
-                type:'POST',
-                url:'/expertises/save?ajax=true',
-                data:expertiseData,
-                success:function (data) {
-                    if (typeof saveExpertiseCallback == 'function')
-                        saveExpertiseCallback(data)
+
+            $("#expertise_form").validate({
+                submitHandler:function () {
+                    $.ajax({
+                        type:'POST',
+                        url:'/expertises/save?ajax=true',
+                        data:expertiseData,
+                        success:function (data) {
+                            if (typeof saveExpertiseCallback == 'function')
+                                saveExpertiseCallback(data)
+                        }
+                    });
                 }
-            });
+            })
+
         }
 
         function getExpertise(expertiseId, callback) {
@@ -98,11 +104,17 @@
                         $('#update_expertise').click(function () {
                             var expertiseIdDiv = $('.expertise_id')[0]
                             var _id = expertiseIdDiv.id.replace('expertise_id_', '')
-
                             var data = {
                                 _id:_id,
-                                name:$('#expertise_name').val()
+                                name:$('#expertise_name').val(),
+                                tweeters:[]
                             }
+                            $('.selectedTweeters li').each(function (index, elem) {
+                                if(index>0){
+                                    var expertiseId = this.id.replace('tweeter_', '')
+                                    data.tweeters.push(expertiseId)
+                                }
+                            })
                             saveExpertise(data, function () {
                                 refreshExpertiseTree()
                             })
@@ -119,6 +131,9 @@
                                 $('#child_expertise_name').val('')
                             })
                         })
+                        $( "#sortable1, #sortable2" ).sortable({
+                        			connectWith: ".connectedSortable"
+                        		}).disableSelection();
                     })
                 })
 

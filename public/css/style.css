@@ -28,7 +28,8 @@ label.error { float: none; color: red; padding-left: .5em; vertical-align: top; 
 
 
 .form_list li label {
-    width: 200px;
+    font-weight: bolder;
+    width: 60px;
     float: left;
 }
 
@@ -67,3 +68,6 @@ label.error { float: none; color: red; padding-left: .5em; vertical-align: top; 
 .editable {
     display: none;
 }
+
+#sortable1, #sortable2 { list-style-type: none; margin: 0; padding: 0 0 2.5em; float: left; margin-right: 10px; }
+	#sortable1 li, #sortable2 li { margin: 0 5px 5px 0px; padding: 5px; font-size: 1.2em; width: 100%;}

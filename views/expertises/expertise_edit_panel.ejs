@@ -1,14 +1,26 @@
+<form id="expertise_form" class="expertise_form">
 <ul  class="form_list" style="display: inline-block;">
 
-             <li><label>Name</label><input name="name" id="expertise_name" value="<%=expertise.name||''%>"/></li>
+             <li><label>Name</label><input class="required" name="name" id="expertise_name" value="<%=expertise.name||''%>"/></li>
              <li>
                  <label>Tweeters</label>
-                 <select multiple>
+                 <ul id="sortable1" class="connectedSortable availableTweeters" style="height:400px; width:300px; border: 1px; border-style: solid;overflow: auto;">
+                     <li style="height:25px; font-weight: bold; background: #d3d3d3;width: 100%;margin-left: 0px;">Available Tweeters</li>
+                    <%for(var a=0;a<availableTweeters.length;a++){%>
+                 	    <li class="ui-state-default available_tweeter" id="tweeter_<%=availableTweeters[a]._id%>"><%=availableTweeters[a].name%></li>
+                    <%}%>
+                </ul>
+                 <ul id="sortable2" class="connectedSortable selectedTweeters" style="height:400px; width:300px; border: 1px; border-style: solid;overflow: auto">
+                     <li style="height:25px; font-weight: bold; background: #d3d3d3;width: 100%;margin-left: 0px;"><%=expertise.name||''%> Tweeters (<%=expertiseTweeters.length%>)</li>
+                     <%for(var e=0;e<expertiseTweeters.length;e++){%>
+                  	    <li class="ui-state-default selected_tweeter" id="tweeter_<%=expertiseTweeters[e]._id%>"><%=expertiseTweeters[e].name%></li>
+                     <%}%>
 
-                 </select>
+                               </ul>
+
              </li>
-            <div class="expertise_id" id="expertise_id_<%=expertise._id%>"></div>
-    <li>
+            <li><div class="expertise_id" id="expertise_id_<%=expertise._id%>"></div></li>
+    <li style="padding-top:10px;"><br>
                 <label>Add Expertise</label>
                 <input name="child_expertise_name" id="child_expertise_name"/>
                 <button class="add_child_expertise_button" id="add_child_expertise_<%=expertise._id%>">Add Child Expertise</button>
@@ -20,3 +32,12 @@
     </li>
 
     </ul>
+</form>
+
+<script>
+$(function() {
+	$( "#sortable1, #sortable2" ).sortable({
+		connectWith: ".connectedSortable"
+	}).disableSelection();
+});
+</script>
