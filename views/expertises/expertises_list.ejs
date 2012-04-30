@@ -82,7 +82,7 @@
 
                 $('#expertise_details').html(data)
                 $('#delete_expertise').click(function () {
-                    showLoading()
+                    showLoading('Deleting...')
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var _id = expertiseIdDiv.id.replace('expertise_id_', '')
                     deleteExpertise(_id, function () {
@@ -91,7 +91,7 @@
                     })
                 })
                 $('#update_expertise').click(function () {
-                    showLoading()
+                    showLoading('Saving...')
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var _id = expertiseIdDiv.id.replace('expertise_id_', '')
                     var data = {
@@ -123,7 +123,7 @@
 
                 })
                 $('.add_child_expertise_button').click(function () {
-                    showLoading()
+                    showLoading('Saving...')
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var parentId = expertiseIdDiv.id.replace('expertise_id_', '')
                     var expertise = {

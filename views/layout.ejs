@@ -25,7 +25,11 @@
 
 
 <script>
-function showLoading(){
+function showLoading(message){
+    if(typeof message=='string')
+        $('#loading_modal span').html(message)
+    else
+        $('#loading_modal span').html('Loading...')
     $('#loading_modal').show();
 }
 
