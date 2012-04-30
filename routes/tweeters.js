@@ -36,25 +36,25 @@ exports.tweeterShow = function (req, res) {
         if (err) {
             res.send(err)
         } else {
-            var ma_expertises=tweeter.ma_expertise||[]
-            models.Expertise.find({_id:{$inma_expertises}},function(error,expertises){
+            var ma_expertises = tweeter.ma_expertise || []
+            models.Expertise.find({_id:{$in:ma_expertises}}, function (error, expertises) {
 
 
-            models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
-                tweeter.loaded_ma_publications=[]
-                if (tweeter.ma_publications) {
-                    for (var p = 0; p < publications.length; p++) {
-                        var pid = publications[p]._id.toString()
-                        if (tweeter.ma_publications.indexOf(pid) > -1) {
-                            tweeter.loaded_ma_publications.push(publications[p])
+                models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
+                    tweeter.loaded_ma_publications = []
+                    if (tweeter.ma_publications) {
+                        for (var p = 0; p < publications.length; p++) {
+                            var pid = publications[p]._id.toString()
+                            if (tweeter.ma_publications.indexOf(pid) > -1) {
+                                tweeter.loaded_ma_publications.push(publications[p])
+                            }
                         }
                     }
-                }
-                res.render('tweeters/tweeters_show.ejs', {
-                    tweeter:tweeter,
-                    expertises:expertises
+                    res.render('tweeters/tweeters_show.ejs', {
+                        tweeter:tweeter,
+                        expertises:expertises
+                    })
                 })
-            })
             })
         }
     })
@@ -71,19 +71,32 @@ exports.tweeterEdit = function (req, res) {
         if (err) {
             res.send(err)
         } else {
-            models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
-                if (tweeter.ma_publications) {
-                    for (var p = 0; p < publications.length; p++) {
-                        var pid = publications[p]._id.toString()
-                        if (tweeter.ma_publications.indexOf(pid) > -1) {
-                            publications[p].selected = true
+            var ma_expertises = tweeter.ma_expertise || []
+            models.Expertise.find({_id:{$in:ma_expertises}}, function (error, selectedExpertises) {
+                models.Expertise.find({_id:{$in:ma_expertises}}, function (error, availableExpertises) {
+                    models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
+                        if (tweeter.ma_publications) {
+                            for (var p = 0; p < publications.length; p++) {
+                                var pid = publications[p]._id.toString()
+                                if (tweeter.ma_publications.indexOf(pid) > -1) {
+                                    publications[p].selected = true
+                                }
+                            }
                         }
-                    }
-                }
-                res.render('tweeters/tweeters_new', {
-                    tweeter:tweeter,
-                    publications:publications,
-                    page_name:'Edit'
+                        for(var s=0;s<selectedExpertises;s++){
+                            for(var a=0;a<availableExpertises;a++){
+                                if(selectedExpertises[s]._id==availableExpertises[a]._id)
+                                    availableExpertises[a].selected=true
+                            }
+                        }
+                        res.render('tweeters/tweeters_new', {
+                            tweeter:tweeter,
+                            publications:publications,
+                            page_name:'Edit',
+                            selectedExpertises:selectedExpertises,
+                            availableExpertises:availableExpertises
+                        })
+                    })
                 })
             })
         }

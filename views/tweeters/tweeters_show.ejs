@@ -14,13 +14,20 @@
     <br>
 
     <div>
-        <% var hard_fields=['screen_name','ma_about','ma_publications','name'] %>
+        <% var hard_fields=['screen_name','ma_about','ma_publications','name','ma_expertise','expertise'] %>
         <ul class="show_list">
             <li>
                 <label>Name</label> <%=tweeter._doc['name']%>
             </li>
             <li>
                             <label>Twitter Screen Name</label> <%=tweeter._doc['screen_name']%>
+            </li>
+            <li>
+                            <label>Expertise</label>
+                <% for(var p=0;p<expertises.length;p++){%>
+                    <%=expertises[p].name%>,
+                <%}%>
+
             </li>
             <li>
                             <label>MA Publication</label>
