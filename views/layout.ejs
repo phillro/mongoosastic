@@ -13,12 +13,25 @@
 
 </head>
 <body>
+
 <a href="/logout">logout</a>
 <a href="/publications/list">Publications</a>
 <a href="/articles/list">Articles</a>
 <a href="/sourcecontent/list">Sources</a>
 <a href="/tweeters/list">Tweeters</a>
 <a href="/expertises/list">Expertise</a>
+<div id="loading_modal" style=""><span>LOADING</span> </div>
 <%- body %>
+
+
+<script>
+function showLoading(){
+    $('#loading_modal').show();
+}
+
+function hideLoading(){
+    $('#loading_modal').hide();
+}
+</script>
 </body>
 </html>

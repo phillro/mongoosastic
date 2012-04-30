@@ -71,7 +71,9 @@
         }
 
         function loadExpertise(expertiseId, callback) {
+            showLoading()
             $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+
                 $('#expertise_details').html(data)
                 $('#delete_expertise').click(function () {
                     var expertiseIdDiv = $('.expertise_id')[0]
@@ -102,6 +104,8 @@
                                             })
                         }
                     })
+                        if(typeof callback=='function')
+                            callback();
 
                 })
                 $('.add_child_expertise_button').click(function () {
@@ -160,6 +164,7 @@
                     $('.selected_tweeter').addClass('ui-multisort-grouped')
                 })
             })
+           hideLoading();
         }
 
 
