@@ -36,6 +36,9 @@ exports.tweeterShow = function (req, res) {
         if (err) {
             res.send(err)
         } else {
+            var ma_expertises=tweeter.ma_expertise||[]
+            models.Expertise.find({_id:{$inma_expertises}},function(error,expertises){
+
 
             models.Publication.find({}, {_id:1, pub_name:1}, {sort:{pub_name:1}}, function (error, publications) {
                 tweeter.loaded_ma_publications=[]
@@ -48,8 +51,10 @@ exports.tweeterShow = function (req, res) {
                     }
                 }
                 res.render('tweeters/tweeters_show.ejs', {
-                    tweeter:tweeter
+                    tweeter:tweeter,
+                    expertises:expertises
                 })
+            })
             })
         }
     })
