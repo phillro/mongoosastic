@@ -120,6 +120,10 @@ exports.tweeterSave = function (req, res) {
     if (req.body._id == '' || (typeof req.body._id == undefined)) {
         //its a new tweeter
         delete req.body._id
+
+            if(typeof eq.body.ma_expertise=='string')
+                req.body.ma_expertise=[req.body.ma_expertise]
+
         tweeter = new models.Tweeter(req.body)
         tweeter.save(function (err, result) {
             if (err) {

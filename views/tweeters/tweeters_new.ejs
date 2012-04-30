@@ -14,18 +14,7 @@
                 <li><label>Screen Name</label><input name="screen_name"  value="<%=tweeter.screen_name||''%>"/></li>
                 <li><label>Full Name</label><input name="name" value="<%=tweeter.name||''%>"/></li>
                 <li><label>MA About</label><textarea name="ma_about" ><%=tweeter.ma_about||''%></textarea></li>
-                <li>
-                    <label>Expertise</label>
-                    <select  multiple="multiple" name="ma_expertise">
-                        <%for(var e=0;e<availableExpertises.length;e++){%>
-                            <%
 
-                                    var selected = availableExpertises[e].selected ? "selected":""
-                            %>
-                            <option <%=selected%> value="<%=availableExpertises[e]._id%>"><%=availableExpertises[e].name%></option>
-                        <%}%>
-                    </select>
-                    </li>
                 <li>
                     <label>Publications</label>
                     <select  multiple="multiple" name="ma_publications">
