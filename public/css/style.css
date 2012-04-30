@@ -16,7 +16,8 @@
 }
 
 .form_list {
-    list-style: none
+    list-style: none;
+    width: 50%;
 }
 
 .form_list li {
