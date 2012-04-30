@@ -39,10 +39,12 @@
     $(function () {
 
         function deleteExpertise(expertiseId,deleteExpertiseCallback){
+            showLoading()
             $.ajax({
                 type:'DELETE',
                 url:'/expertises/del/'+expertiseId+'?ajax=true',
                 success:function (data) {
+                    hideLoading();
                     if (typeof deleteExpertiseCallback == 'function')
                         deleteExpertiseCallback(data)
                 }
@@ -50,39 +52,46 @@
         }
 
         function saveExpertise(expertiseData, saveExpertiseCallback) {
+            showLoading()
                     $.ajax({
                         type:'POST',
                         url:'/expertises/save?ajax=true',
                         data:expertiseData,
                         success:function (data) {
+                            hideLoading();
                             if (typeof saveExpertiseCallback == 'function')
                                 saveExpertiseCallback(data)
                         }
+
                     });
 
 
         }
 
         function getExpertise(expertiseId, callback) {
+
             $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+                hideLoading();
                 if (typeof callback == 'function')
                     callback(data)
             })
         }
 
         function loadExpertise(expertiseId, callback) {
-            showLoading()
             $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
 
                 $('#expertise_details').html(data)
                 $('#delete_expertise').click(function () {
+                    showLoading()
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var _id = expertiseIdDiv.id.replace('expertise_id_', '')
                     deleteExpertise(_id, function () {
                         refreshExpertiseTree()
+                        hideLoading();
                     })
                 })
                 $('#update_expertise').click(function () {
+                    showLoading()
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var _id = expertiseIdDiv.id.replace('expertise_id_', '')
                     var data = {
@@ -96,19 +105,25 @@
                             data.tweeters.push(expertiseId)
                         }
                     })
+                    hideLoading();
                     $("#expertise_form").validate({
                         submitHandler:function () {
                             saveExpertise(data, function () {
-                                                refreshExpertiseTree()
-                                                loadExpertise(expertiseId)
-                                            })
+                                showLoading()
+                                refreshExpertiseTree()
+                                loadExpertise(expertiseId, function () {
+                                    hideLoading();
+                                })
+                            })
                         }
                     })
-                        if(typeof callback=='function')
-                            callback();
+
+                    if (typeof callback == 'function')
+                        callback();
 
                 })
                 $('.add_child_expertise_button').click(function () {
+                    showLoading()
                     var expertiseIdDiv = $('.expertise_id')[0]
                     var parentId = expertiseIdDiv.id.replace('expertise_id_', '')
                     var expertise = {
@@ -117,6 +132,7 @@
                     }
                     saveExpertise(expertise, function (addResponse) {
                         refreshExpertiseTree()
+                        hideLoading();
                         $('#child_expertise_name').val('')
                     })
                 })
@@ -163,13 +179,15 @@
                     $('.selected_tweeter').removeClass('ui-multisort-grouped')
                     $('.selected_tweeter').addClass('ui-multisort-grouped')
                 })
-                hideLoading();
+                if(typeof callback=='function')
+                    callback();
             })
 
         }
 
 
         function refreshExpertiseTree(callback) {
+            showLoading()
             $.get('/expertises/list?ajax=true', function (data) {
                 $('#tree_panel').empty();
                 $('#tree_panel').html(data)
@@ -195,12 +213,14 @@
 
                 $('.expertise_node_lnk').click(function () {
                     var expertiseId = this.id.replace('expertise_node_', '')
-                        loadExpertise(expertiseId)
-                    //getExpertise(expertiseId, function (data) {})
+                    showLoading()
+                        loadExpertise(expertiseId,function(){
+                            hideLoading();
+                        })
 
                 })
 
-
+                hideLoading();
 
                 if (typeof callback == 'function')
                     callback(data)
