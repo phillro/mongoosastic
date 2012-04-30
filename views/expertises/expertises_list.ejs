@@ -13,10 +13,13 @@
         </div>
         <hr>
         <div style="float: left;padding-right:10px;border-right:1px solid;">
-            <div>
-                <input name="root_expertise_name" id="root_expertise_name"/>
+
+            <div><form id="root_expertise_form">
+                <input class="required" name="root_expertise_name" id="root_expertise_name"/>
                 <button id="add_root_expertise">Add Root Expertise</button>
+            </form>
             </div>
+
             <div id="tree_panel" style="min-height: 450px;" >
 
                 <%-partial('expertise_tree',{expertises:expertises})%>
@@ -29,6 +32,9 @@
         </div>
     </div>
 </div>
+        <style>
+
+        </style>
 <script type="text/javascript">
     $(function () {
 
@@ -44,9 +50,6 @@
         }
 
         function saveExpertise(expertiseData, saveExpertiseCallback) {
-
-            $("#expertise_form").validate({
-                submitHandler:function () {
                     $.ajax({
                         type:'POST',
                         url:'/expertises/save?ajax=true',
@@ -56,8 +59,7 @@
                                 saveExpertiseCallback(data)
                         }
                     });
-                }
-            })
+
 
         }
 
@@ -65,6 +67,98 @@
             $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
                 if (typeof callback == 'function')
                     callback(data)
+            })
+        }
+
+        function loadExpertise(expertiseId, callback) {
+            $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+                $('#expertise_details').html(data)
+                $('#delete_expertise').click(function () {
+                    var expertiseIdDiv = $('.expertise_id')[0]
+                    var _id = expertiseIdDiv.id.replace('expertise_id_', '')
+                    deleteExpertise(_id, function () {
+                        refreshExpertiseTree()
+                    })
+                })
+                $('#update_expertise').click(function () {
+                    var expertiseIdDiv = $('.expertise_id')[0]
+                    var _id = expertiseIdDiv.id.replace('expertise_id_', '')
+                    var data = {
+                        _id:_id,
+                        name:$('#expertise_name').val(),
+                        tweeters:[]
+                    }
+                    $('.selectedTweeters div').each(function (index, elem) {
+                        if (index > 0) {
+                            var expertiseId = this.id.replace('tweeter_', '')
+                            data.tweeters.push(expertiseId)
+                        }
+                    })
+                    $("#expertise_form").validate({
+                        submitHandler:function () {
+                            saveExpertise(data, function () {
+                                                refreshExpertiseTree()
+                                                loadExpertise(expertiseId)
+                                            })
+                        }
+                    })
+
+                })
+                $('.add_child_expertise_button').click(function () {
+                    var expertiseIdDiv = $('.expertise_id')[0]
+                    var parentId = expertiseIdDiv.id.replace('expertise_id_', '')
+                    var expertise = {
+                        parentId:parentId,
+                        name:$('#child_expertise_name').val()
+                    }
+                    saveExpertise(expertise, function (addResponse) {
+                        refreshExpertiseTree()
+                        $('#child_expertise_name').val('')
+                    })
+                })
+                $("#sortable1, #sortable2").multisortable({
+                    stop:function (e, ui) {
+                        var $group = $('.ui-multisort-grouped').not(ui.item);
+                        $group.clone().insertAfter($(ui.item));
+                        $group.each(function () {
+                            $(this).removeClass('ui-multisort-grouped');
+                        });
+                        $group.remove();
+                    },
+                    connectWith:".connectedSortable"
+                }).disableSelection();
+
+                $('.availableTweeters div').dblclick(function () {
+                    var litem = $(this).clone();
+                    litem.hide().appendTo($('.selectedTweeters')).fadeIn();
+                    $(this).remove();
+                    litem.dblclick(function () {
+                        var litem = $(this).clone();
+                        litem.appendTo($('.availableTweeters'));
+                        $(this).remove();
+                    });
+                });
+
+                $('.selectedTweeters div').dblclick(function () {
+                    var litem = $(this).clone();
+                    litem.hide().appendTo($('.availableTweeters')).fadeIn();
+                    $(this).remove();
+                    litem.dblclick(function () {
+                        var litem = $(this).clone();
+                        litem.hide().appendTo($('.selectedTweeters')).fadeIn();
+                        $(this).remove();
+                    })
+                });
+
+                $('#select_all_available_tweeters').click(function () {
+                    $('.available_tweeter').removeClass('ui-multisort-grouped')
+                    $('.available_tweeter').addClass('ui-multisort-grouped')
+                })
+
+                $('#select_all_selected_tweeters').click(function () {
+                    $('.selected_tweeter').removeClass('ui-multisort-grouped')
+                    $('.selected_tweeter').addClass('ui-multisort-grouped')
+                })
             })
         }
 
@@ -83,83 +177,23 @@
                         name:$('#root_expertise_name').val(),
                         is_root:true
                     }
-                    saveExpertise(data, function () {
-                        refreshExpertiseTree()
+                    $("#root_expertise_form").validate({
+                        submitHandler:function () {
+                            saveExpertise(data, function () {
+                                refreshExpertiseTree()
+                            })
+                        }
                     })
                 })
 
 
                 $('.expertise_node_lnk').click(function () {
                     var expertiseId = this.id.replace('expertise_node_', '')
+                        loadExpertise(expertiseId)
                     //getExpertise(expertiseId, function (data) {})
-                    $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
-                        $('#expertise_details').html(data)
-                        $('#delete_expertise').click(function () {
-                            var expertiseIdDiv = $('.expertise_id')[0]
-                            var _id = expertiseIdDiv.id.replace('expertise_id_', '')
-                            deleteExpertise(_id,function(){
-                                refreshExpertiseTree()
-                            })
-                        })
-                        $('#update_expertise').click(function () {
-                            var expertiseIdDiv = $('.expertise_id')[0]
-                            var _id = expertiseIdDiv.id.replace('expertise_id_', '')
-                            var data = {
-                                _id:_id,
-                                name:$('#expertise_name').val(),
-                                tweeters:[]
-                            }
-                            $('.selectedTweeters li').each(function (index, elem) {
-                                if(index>0){
-                                    var expertiseId = this.id.replace('tweeter_', '')
-                                    data.tweeters.push(expertiseId)
-                                }
-                            })
-                            saveExpertise(data, function () {
-                                refreshExpertiseTree()
-                            })
-                        })
-                        $('.add_child_expertise_button').click(function () {
-                            var expertiseIdDiv = $('.expertise_id')[0]
-                            var parentId = expertiseIdDiv.id.replace('expertise_id_', '')
-                            var expertise = {
-                                parentId:parentId,
-                                name:$('#child_expertise_name').val()
-                            }
-                            saveExpertise(expertise, function (addResponse) {
-                                refreshExpertiseTree()
-                                $('#child_expertise_name').val('')
-                            })
-                        })
-                        $("#sortable1, #sortable2").sortable({
-                            connectWith:".connectedSortable"
-                        }).disableSelection();
 
-                        $('.availableTweeters li').dblclick(function () {
-                            var litem = $(this).clone();
-                            litem.hide().appendTo($('.selectedTweeters')).fadeIn();
-                            $(this).remove();
-                            litem.dblclick(function () {
-                                var litem = $(this).clone();
-                                litem.appendTo($('.availableTweeters'));
-                                $(this).remove();
-                            });
-                        });
-
-                        $('.selectedTweeters li').dblclick(function () {
-                            var litem = $(this).clone();
-                            litem.hide().appendTo($('.availableTweeters')).fadeIn();
-                            $(this).remove();
-                            litem.dblclick(function () {
-                                var litem = $(this).clone();
-                                litem.hide().appendTo($('.selectedTweeters')).fadeIn();
-                                $(this).remove();
-                            })
-                        });
-
-
-                    })
                 })
+
 
 
                 if (typeof callback == 'function')

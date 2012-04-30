@@ -69,5 +69,30 @@ label.error { float: none; color: red; padding-left: .5em; vertical-align: top; 
     display: none;
 }
 
-#sortable1, #sortable2 { list-style-type: none; margin: 0; padding: 0 0 2.5em; float: left; margin-right: 10px; }
-	#sortable1 li, #sortable2 li { margin: 0 5px 5px 0px; padding: 5px; font-size: 1.2em; width: 100%;}
+.sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 2.5em;
+    float: left;
+    margin-right: 10px;
+    background-color:#555;border-radius:.5em;box-shadow:0 0 20px black;
+
+}
+
+.sortable li {
+    margin: 0 5px 5px 0px;
+    padding: 5px;
+    font-size: 1.2em;
+    width: 95%;
+    background-color:#333;color:#aaa;border:1px solid #777;background-color:#333;color:#aaa;border-radius:.25em;cursor:default;
+}
+
+.sortable li:hover{color:black;}
+
+.ui-multisort-grouped{background-color:#36a !important;border-color:#036 !important;color:#fff !important;font-weight:bolder;}
+
+
+.container{width:52%;margin:1in auto;background-color:#555;border-radius:.5em;box-shadow:0 0 20px black;}
+.container div{background-color:#333;color:#aaa;border:1px solid #777;background-color:#333;color:#aaa;border-radius:.25em;cursor:default;height:1em;}
+.container div:hover{background-color:#383838;color:#ccc;}
+.ui-multisort-grouped{background-color:#36a !important;border-color:#036 !important;color:#fff !important;font-weight:bolder;}
