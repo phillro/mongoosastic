@@ -10,7 +10,25 @@
                          <div style="float:right;"><a id="select_all_available_tweeters" href="#">Select All</a></div>
                      </div>
                     <%for(var a=0;a<availableTweeters.length;a++){%>
-                 	    <div class="ui-state-default available_tweeter" id="tweeter_<%=availableTweeters[a]._id%>"><%=availableTweeters[a].name%></div>
+                        <%
+                            var displayName=false;
+                            if(availableTweeters[a].name){
+                                if(availableTweeters[a].name.trim().length>0){
+                                    displayName=availableTweeters[a].name
+                                }
+                            }
+                            if(!displayName){
+                                if(availableTweeters[a].screen_name){
+                                    if(availableTweeters[a].screen_name.trim().length>0){
+                                        displayName=availableTweeters[a].screen_name
+                                    }
+                                }
+                            }
+                            if(!displayName){
+                                displayName='UNKOWN SHOULD DELETE';
+                            }
+                        %>
+                 	    <div class="ui-state-default available_tweeter" id="tweeter_<%=availableTweeters[a]._id%>"><%=displayName%></div>
                     <%}%>
                 </div>
                  <div id="sortable2" class="connectedSortable selectedTweeters sortable" style="height:400px; width:300px; border: 1px; border-style: solid;overflow: auto">
@@ -18,7 +36,25 @@
                          <div style="float:right;"><a id="select_all_selected_tweeters" href="#">Select All</a></div>
                      </div>
                      <%for(var e=0;e<expertiseTweeters.length;e++){%>
-                  	    <div class="ui-state-default selected_tweeter" id="tweeter_<%=expertiseTweeters[e]._id%>"><%=expertiseTweeters[e].name%></div>
+                     <%
+                         var displayName=false;
+                         if(expertiseTweeters[e].name){
+                             if(expertiseTweeters[e].name.trim().length>0){
+                                 displayName=expertiseTweeters[e].name
+                             }
+                         }
+                         if(!displayName){
+                             if(expertiseTweeters[e].screen_name){
+                                 if(expertiseTweeters[e].screen_name.trim().length>0){
+                                     displayName=expertiseTweeters[e].screen_name
+                                 }
+                             }
+                         }
+                         if(!displayName){
+                             displayName='UNKOWN SHOULD DELETE';
+                         }
+                     %>
+                  	    <div class="ui-state-default selected_tweeter" id="tweeter_<%=expertiseTweeters[e]._id%>"><%=displayName%></div>
                      <%}%>
 
                                </div>
