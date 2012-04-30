@@ -1,27 +1,26 @@
 var async = require('async')
 
 
-function loadExpertiseNodeParents(expertiseId,loadExpertiseNodeParentCallback){
-    models.Expertise.find({children:expertiseId},function(err,parents){
-        loadExpertiseNodeParentCallback(err,parents)
+function loadExpertiseNodeParents(expertiseId, loadExpertiseNodeParentCallback) {
+    models.Expertise.find({children:expertiseId}, function (err, parents) {
+        loadExpertiseNodeParentCallback(err, parents)
     })
 }
 
-function getExpertiseNodeParentIds(expertiseId,parentIds,getExpertiseNodeParentIdsCallback){
-    loadExpertiseNodeParents(expertiseId,function(err,parents){
-        if(parents){
-            async.forEachSeries(parents,function(parent,parentCallback){
+function getExpertiseNodeParentIds(expertiseId, parentIds, getExpertiseNodeParentIdsCallback) {
+    loadExpertiseNodeParents(expertiseId, function (err, parents) {
+        if (parents) {
+            async.forEachSeries(parents, function (parent, parentCallback) {
                 parentIds.push(parent._id.toString())
-                getExpertiseNodeParentIds(parent._id,parentIds,getExpertiseNodeParentIdsCallback)
-            },function(err){
+                getExpertiseNodeParentIds(parent._id, parentIds, getExpertiseNodeParentIdsCallback)
+            }, function (err) {
                 getExpertiseNodeParentIdsCallback(parentIds)
             })
-        }else{
+        } else {
             getExpertiseNodeParentIdsCallback(parentIds)
         }
     })
 }
-
 
 
 function loadExpertiseIds(expertises, loadExpertiseIdsCallback) {
@@ -69,6 +68,7 @@ function loadExpertiseIds(expertises, loadExpertiseIdsCallback) {
 
 exports.expertisesList = function (req, res) {
     var start = parseInt(req.query.start || 0)
+    var format = req.params.format || 'normal'
     var perpage = 20
     var previous = 0
     previous = (start - perpage) > 0 ? start - perpage : 0
@@ -79,12 +79,18 @@ exports.expertisesList = function (req, res) {
                 res.send(err)
             } else {
                 loadExpertiseIds(expertises, function (err, populatedExpertises) {
-                    if (req.query.ajax) {
+                    if (format == 'ajax') {
                         res.partial('expertises/expertise_tree.ejs', {
                             expertises:populatedExpertises
                         })
 
-                    } else {
+                    }
+                    if (format == 'json') {
+                        res.json({
+                            expertises:populatedExpertises
+                        })
+                    }
+                    if (format == 'normal') {
                         res.render('expertises/expertises_list.ejs', {
                             expertises:populatedExpertises,
                             total:count,
@@ -102,7 +108,8 @@ exports.expertisesList = function (req, res) {
 
 
 exports.expertisesShow = function (req, res) {
-
+    req.params = req.params || {}
+    var format = req.params.format || 'normal'
     var _id = req.params.id
 
     async.waterfall([
@@ -122,7 +129,7 @@ exports.expertisesShow = function (req, res) {
         },
         function (expertise, availableTweeters, stepThreeCallback) {
             models.Tweeter.find({ma_expertise:expertise._id}, function (err, expertiseTweeters) {
-                if(err)
+                if (err)
                     console.log(err)
                 expertiseTweeters = expertiseTweeters || []
                 stepThreeCallback(err, expertise, availableTweeters, expertiseTweeters)
@@ -133,13 +140,22 @@ exports.expertisesShow = function (req, res) {
             console.log(err)
             res.send(err)
         } else {
-            if (req.query.ajax) {
+            if (format == 'ajax') {
                 res.partial('expertises/expertise_edit_panel', {
                     expertise:expertise,
                     availableTweeters:availableTweeters,
                     expertiseTweeters:expertiseTweeters
                 })
-            } else {
+            }
+
+            if (format == 'json') {
+                var tweeterCount = expertiseTweeters.length
+                res.json({
+                    expertise:expertise,
+                    tweeterCount:tweeterCount
+                })
+            }
+            if (format == 'normal') {
                 res.render('expertises/expertises_show', {
                     expertise:expertise,
                     availableTweeters:availableTweeters,
@@ -148,9 +164,7 @@ exports.expertisesShow = function (req, res) {
 
             }
         }
-
     })
-
 }
 
 exports.expertisesDelete = function (req, res) {
@@ -171,14 +185,15 @@ exports.expertisesDelete = function (req, res) {
 exports.expertisesSave = function (req, res) {
     var expertise
     var tweeterIdList = req.body.tweeters || []
-        //Includes parents
-    var expertiseIdList= []
+    //Includes parents
+    var expertiseIdList = []
 
     async.waterfall([
-        function(stepZeroCallback){
-            getExpertiseNodeParentIds(req.body._id,[],function(parentIds){
-                expertiseIdList=parentIds
-                expertiseIdList.push(req.body._id)
+        function (stepZeroCallback) {
+            getExpertiseNodeParentIds(req.body._id, [], function (parentIds) {
+                expertiseIdList = parentIds
+                if (req.body._id)
+                    expertiseIdList.push(req.body._id)
                 stepZeroCallback()
             })
         },
@@ -219,12 +234,12 @@ exports.expertisesSave = function (req, res) {
                     }
                 })
             } else {
-                stepTwoCallback(undefined, savedExpertise,undefined)
+                stepTwoCallback(undefined, savedExpertise, undefined)
             }
         },
         function (savedExpertise, updatedParent, stepThreeCallback) {
             //Remove expertises from tweeters not in tweeterIdList
-            models.Tweeter.update({_id:{$nin:tweeterIdList}}, {$pull:{ma_expertise:savedExpertise._id}},{multi: true}, function (err, numberAffected) {
+            models.Tweeter.update({_id:{$nin:tweeterIdList}}, {$pull:{ma_expertise:savedExpertise._id}}, {multi:true}, function (err, numberAffected) {
                 if (err) {
                     console.log(err)
                 }
@@ -233,7 +248,7 @@ exports.expertisesSave = function (req, res) {
         },
         function (savedExpertise, updatedParent, stepFourCallback) {
             //Add expertise to tweeters  in tweeterIdList
-            models.Tweeter.update({_id:{$in:tweeterIdList}}, {$addToSet:{ma_expertise:{$each:expertiseIdList}}},{multi: true}, function (err, numberAffected) {
+            models.Tweeter.update({_id:{$in:tweeterIdList}}, {$addToSet:{ma_expertise:{$each:expertiseIdList}}}, {multi:true}, function (err, numberAffected) {
                 if (err) {
                     console.log(err)
                 }

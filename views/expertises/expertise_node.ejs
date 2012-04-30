@@ -1,7 +1,12 @@
 
     <%for(var e=0;e<expertises.length;e++){%>
         <li>
-            <span class="folder expertise_node" ><a href="#" class="expertise_node_lnk" id="expertise_node_<%=expertises[e]._id%>"><%=expertises[e].name%></a></span>
+            <span class="folder expertise_node" >
+                <a href="#" class="expertise_node_lnk" id="expertise_node_<%=expertises[e]._id%>"><%=expertises[e].name%>
+                <% if(expertises[e]._doc.tweeters){%>
+                    (<%=expertises[e]._doc.tweeters.length%>)
+                <%}%>
+            </a></span>
             <%if(typeof expertises[e].populatedChildren!='undefined'){%>
                 <%if(expertises[e].populatedChildren.length>0){%>
                     <ul>

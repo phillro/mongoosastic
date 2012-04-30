@@ -1,6 +1,6 @@
 <div>
     <div>
-        <h2>Expertise List</h2>
+        <h2>Expertise Management</h2>
     </div>
     <br>
 
@@ -70,7 +70,7 @@
 
         function getExpertise(expertiseId, callback) {
 
-            $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+            $.get('/expertises/show/' + expertiseId + '.ajax', function (data) {
                 hideLoading();
                 if (typeof callback == 'function')
                     callback(data)
@@ -78,7 +78,7 @@
         }
 
         function loadExpertise(expertiseId, callback) {
-            $.get('/expertises/show/' + expertiseId + '?ajax=true', function (data) {
+            $.get('/expertises/show/' + expertiseId + '.ajax', function (data) {
 
                 $('#expertise_details').html(data)
                 $('#delete_expertise').click(function () {
@@ -188,7 +188,7 @@
 
         function refreshExpertiseTree(callback) {
             showLoading()
-            $.get('/expertises/list?ajax=true', function (data) {
+            $.get('/expertises/list.ajax', function (data) {
                 $('#tree_panel').empty();
                 $('#tree_panel').html(data)
                 $("#browser").treeview({
