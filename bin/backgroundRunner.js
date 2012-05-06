@@ -14,7 +14,7 @@ var child_proc = require('child_process');
 
 var processTweets = function (callback) {
     var processTweetsData = child_proc.spawn('node', ['processTweets.js',env]);
-    var running=true
+    var shouldBeDead=false
     processTweetsData.stdout.on('data', function (data) {
         logger.log('info', data)
     });
@@ -30,14 +30,19 @@ var processTweets = function (callback) {
         } else {
             logger.log('info', 'processTweetsData Complete')
         }
-        running=false
-        if(typeof callback=='function')
+
+        if(typeof callback=='function'&&(!shouldBeDead)){
+            shouldBeDead=true
             callback(code)
+        }
+
     });
 
     setTimeout(function(){
-        console.log('killing child')
-        if(processTweetsData&&running){
+        console.log('Checking processTweetsData proc')
+        if(processTweetsData&&(!shouldBeDead)){
+            shouldBeDead=true
+            console.log('killing child')
             processTweetsData.kill()
             callback('SIGTERM SENT')
         }
@@ -70,7 +75,6 @@ var processSourceContents = function (callback) {
         } else {
             logger.log('info', 'processSourceContentsData Complete')
         }
-        exitted=true;
         if(typeof callback=='function')
             callback(code)
     });
