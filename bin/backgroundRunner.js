@@ -14,7 +14,7 @@ var child_proc = require('child_process');
 
 var processTweets = function (callback) {
     var processTweetsData = child_proc.spawn('node', ['processTweets.js',env]);
-
+    var running=true
     processTweetsData.stdout.on('data', function (data) {
         logger.log('info', data)
     });
@@ -30,13 +30,14 @@ var processTweets = function (callback) {
         } else {
             logger.log('info', 'processTweetsData Complete')
         }
+        running=false
         if(typeof callback=='function')
             callback(code)
     });
 
     setTimeout(function(){
         console.log('killing child')
-        if(processTweetsData){
+        if(processTweetsData&&running){
             processTweetsData.kill()
             callback('SIGTERM SENT')
         }
