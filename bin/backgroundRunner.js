@@ -33,6 +33,14 @@ var processTweets = function (callback) {
         if(typeof callback=='function')
             callback(code)
     });
+
+    setTimeout(function(){
+        console.log('killing child')
+        if(processSourceContentsData){
+            processSourceContentsData.kill()
+            callback('SIGTERM SENT')
+        }
+    },20000)
 }
 
 var processTweetsComplete = function(code){
@@ -45,7 +53,7 @@ processTweets(processTweetsComplete)
 
 var processSourceContents = function (callback) {
     var processSourceContentsData = child_proc.spawn('node', ['processSourceContents.js',env]);
-    var exitted=false
+    
     processSourceContentsData.stdout.on('data', function (data) {
         logger.log('info', data)
     });
@@ -66,13 +74,6 @@ var processSourceContents = function (callback) {
             callback(code)
     });
 
-    setTimeout(function(){
-        console.log('killing child')
-        if(processSourceContentsData){
-            processSourceContentsData.kill()
-            callback('SIGTERM SENT')
-        }
-    },20000)
 }
 
 var processSourceContentsComplete = function(code){
