@@ -45,7 +45,7 @@ processTweets(processTweetsComplete)
 
 var processSourceContents = function (callback) {
     var processSourceContentsData = child_proc.spawn('node', ['processSourceContents.js',env]);
-
+    var exitted=false
     processSourceContentsData.stdout.on('data', function (data) {
         logger.log('info', data)
     });
@@ -61,9 +61,16 @@ var processSourceContents = function (callback) {
         } else {
             logger.log('info', 'processSourceContentsData Complete')
         }
+        exitted=true;
         if(typeof callback=='function')
             callback(code)
     });
+
+    setTimeout(function(){
+        if(!exitted){
+            processSourceContentsData.kill()
+        }
+    },20000)
 }
 
 var processSourceContentsComplete = function(code){
