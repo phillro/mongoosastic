@@ -36,11 +36,11 @@ var processTweets = function (callback) {
 
     setTimeout(function(){
         console.log('killing child')
-        if(processSourceContentsData){
-            processSourceContentsData.kill()
+        if(processTweetsData){
+            processTweetsData.kill()
             callback('SIGTERM SENT')
         }
-    },20000)
+    },30000)
 }
 
 var processTweetsComplete = function(code){
@@ -53,7 +53,7 @@ processTweets(processTweetsComplete)
 
 var processSourceContents = function (callback) {
     var processSourceContentsData = child_proc.spawn('node', ['processSourceContents.js',env]);
-    
+
     processSourceContentsData.stdout.on('data', function (data) {
         logger.log('info', data)
     });
