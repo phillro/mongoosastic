@@ -69,6 +69,7 @@ var processSourceContents = function (callback) {
     setTimeout(function(){
         if(!exitted){
             processSourceContentsData.kill()
+            callback('SIGTERM SENT')
         }
     },20000)
 }
