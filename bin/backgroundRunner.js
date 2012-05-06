@@ -67,7 +67,8 @@ var processSourceContents = function (callback) {
     });
 
     setTimeout(function(){
-        if(!exitted){
+        console.log('killing child')
+        if(processSourceContentsData){
             processSourceContentsData.kill()
             callback('SIGTERM SENT')
         }
