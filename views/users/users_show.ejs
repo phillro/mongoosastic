@@ -1,0 +1,34 @@
+<div>
+    <div>
+        <h2>
+            <%=userObj.name%>
+        </h2>
+        <div style="float:left; margin-right: 20px"><a href="/users/list?start=0">Home</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/users/create">Create New</a></div>
+        <div style="float:left; margin-right: 20px"><a href="/users/edit/<%=userObj._id%>">Edit</a></div>
+
+    </div>
+    <br>
+
+    <div>
+        <ul class="show_list">
+            <li>
+                <label>Email</label> <%=userObj._doc['email']%>
+            </li>
+            <li>
+                <label>Name</label> <%=userObj._doc['name']%>
+            </li>
+            <li>
+                <label>Enabled</label> <%=userObj._doc['enabled']%>
+            </li>
+            <li>
+                <label>Account Type</label>
+                <% for(var accountType in app.schemas.AccountTypes){%>
+                        <%if(app.schemas.AccountTypes[accountType]==userObj._doc['account_type']){%>
+                            <%=accountType%>
+                        <%}%>
+                <%}%>
+            </li>
+        </ul>
+    </div>
+</div>

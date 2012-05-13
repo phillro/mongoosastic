@@ -8,7 +8,7 @@ cli.parse({
     verbose:['v', 'Print response']
 });
 
-var env = cli.args.shift() || 'development'
+var env = cli.args.shift() || 'test'
     console.log(env)
 conf = require('./etc/conf')[env]
 var express = require('express')
@@ -21,68 +21,11 @@ var app = module.exports = express.createServer();
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
 GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
 var MediaAmpModels = require('mediaamp-models/index.js')
-GLOBAL.schemas = schemas = MediaAmpModels
-GLOBAL.models = MediaAmpModels.loadModels(modelsDb,schemas)
+GLOBAL.schemas = app.schemas =  MediaAmpModels
+GLOBAL.models = app.models= MediaAmpModels.loadModels(modelsDb,app.schemas)
 GLOBAL.maHelper = new require('./lib/Helpers')(conf)
 
-var authWrapper = new require('./lib/auth')()
-var everyauthRoot = __dirname + '/node_modules/everyauth';
-everyauth.everymodule
-    .findUserById(authWrapper.findUserById);
-
-everyauth
-    .password
-    .loginWith('email')
-    .getLoginPath('/login')
-    .postLoginPath('/login')
-    .loginView('login.jade')
-    .loginLocals(function (req, res, done) {
-        setTimeout(function () {
-            done(null, {
-                title:'Async login'
-            });
-        }, 200);
-    })
-    .authenticate(function (login, password) {
-        var errors = [];
-        if (!login) errors.push('Missing login');
-        if (!password) errors.push('Missing password');
-        if (errors.length) return errors;
-        var user = authWrapper.usersByLogin[login];
-        if (!user) return ['Login failed'];
-        if (user.password !== password) return ['Login failed'];
-        return user;
-    })
-
-    .getRegisterPath('/register')
-    .postRegisterPath('/register')
-    .registerView('register.jade')
-    .registerLocals(function (req, res, done) {
-        setTimeout(function () {
-            done(null, {
-                title:'Async Register'
-            });
-        }, 200);
-    })
-    .validateRegistration(function (newUserAttrs, errors) {
-        var login = newUserAttrs.login;
-        if (usersByLogin[login]) errors.push('Login already taken');
-        return errors;
-    })
-    .registerUser(function (newUserAttrs) {
-        var login = newUserAttrs[this.loginKey()];
-        return usersByLogin[login] = addUser(newUserAttrs);
-    })
-
-    .loginSuccessRedirect('/sourcecontent/list')
-    .registerSuccessRedirect('/');
-/*
-GLOBAL.models = {
-    Article:mediaAmpDb.model('article', MediaAmpModels.ArticleSchema),
-    SourceContent:mediaAmpDb.model('source_content', MediaAmpModels.SourceContentSchema),
-    Tweet:mediaAmpDb.model('tweet', MediaAmpModels.TweeterSchema),
-    Tweeter:mediaAmpDb.model('tweeter', MediaAmpModels.TweeterSchema)
-}*/
+var everyauth = new require('./lib/auth')(app)
 
 app.configure(function () {
     app.set('views', __dirname + '/views');
@@ -118,6 +61,7 @@ app.get('/logout', function (req, res) {
 var index = require('./routes');
 var articles = require('./routes/articles')
 var tweeters = require('./routes/tweeters')
+var users = require('./routes/users')
 var sourceContent = require('./routes/sourceContent')
 var publications = require('./routes/publications')
 var expertises = require('./routes/expertises')
@@ -139,6 +83,12 @@ app.get('/tweeters/show/:id', tweeters.tweeterShow);
 app.get('/tweeters/create', tweeters.tweeterNew);
 app.get('/tweeters/edit/:id', tweeters.tweeterEdit);
 app.post('/tweeters/save', tweeters.tweeterSave);
+
+app.get('/users/list', users.userList);
+app.get('/users/show/:id', users.userShow);
+app.get('/users/create', users.userNew);
+app.get('/users/edit/:id', users.userEdit);
+app.post('/users/save', users.userSave);
 
 
 app.get('/publications/list', publications.publicationsList);

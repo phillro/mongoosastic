@@ -25,5 +25,6 @@
     , "mediaamp-data":"git+ssh://git@github.com:MediaProjectAmp/MediaAmp-Models.git"
     , "jsdom":">0.0.1"
     , "jquery":">0.0.1"
+    , "md5":">0.0.1"
     }
 }

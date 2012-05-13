@@ -20,7 +20,8 @@
 <a href="/sourcecontent/list">Sources</a>
 <a href="/tweeters/list">Tweeters</a>
 <a href="/expertises/list">Expertise</a>
-<div id="loading_modal" style=""><span>LOADING</span> </div>
+<a href="/users/list">Users</a>
+<div id="loading_modal" style="display:none"><span>LOADING</span> </div>
 <%- body %>
 
 
@@ -32,10 +33,13 @@ function showLoading(message){
         $('#loading_modal span').html('Loading...')
     $('#loading_modal').show();
 }
-
 function hideLoading(){
-    $('#loading_modal').hide();
-}
+        $('#loading_modal').hide();
+    }
+$(document).ready(function(){
+
+
+})
 </script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+<div>
+    <div>
+        <h2>User List</h2>
+        <div>Showing <%=start-20%> to <%= start%> of <%=total%></div>
+        <div style="float:left; margin-right: 20px"><a href="/users/list?start=0">Home</a></div>
+        <%if(previous>=0){%>
+        <div style="float:left; margin-right: 20px"><a href="/users/list?start=<%=previous%>">Previous</a></div>
+        <%}%>
+        <div style="float:left"><a href="/users/list?start=<%=start%>">Next</a></div>
+    </div>
+    <br>
+    <div>
+        <div style="float:left; margin-right: 20px"><a href="/users/create">New</a></div>
+    </div>
+    <br>
+    <div>
+        <ul style="list-style: none">
+            <% for(var i=0;i<users.length;i++){%>
+            <li style="margin-bottom: 5px">
+                <div>
+                    <a href="/users/show/<%=users[i]._id%>"><%=users[i].name%></a>
+                    <% for(var accountType in app.schemas.AccountTypes){%>
+                                            <%if(app.schemas.AccountTypes[accountType]==users[i]._doc['account_type']){%>
+                                                [<%=accountType%>]
+                                            <%}%>
+                                    <%}%>
+                    <a href="/users/edit/<%=users[i]._id%>">Edit</a>
+                    <br>
+                </div>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>

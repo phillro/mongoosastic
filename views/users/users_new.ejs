@@ -1,0 +1,46 @@
+<div>
+    <div>
+        <h2><%=page_name%> New User</h2>
+
+        <div style="float:left; margin-right: 20px"><a href="/users/list?start=0">Home</a></div>
+    </div>
+    <br>
+
+    <div>
+        <form method="post" action="/users/save" id="user_form">
+            <%if(typeof errors !='undefined'){%>
+            <%- partial('../form_parts/errors.ejs',{errors:errors})%>
+            <%}%>
+            <ul class="form_list">
+
+                <li><label>Email</label><input class="required email" name="email" value="<%=userObj.email||''%>"/></li>
+                <li><label>Password</label><input class="required" type="password" name="password" minlength="6"/></li>
+                <li><label>Name</label><input class="required" name="name" value="<%=userObj.name||''%>"/></li>
+                <li>
+                    <label>Account Type</label>
+                    <select name="account_type">
+
+                        <% for(var accountType in app.schemas.AccountTypes){ %>
+                        <%var selected=""%>
+                            <%if(app.schemas.AccountTypes[accountType]==userObj.account_type){%>
+                                <%selected="selected"%>
+                            <%}%>
+                            <option <%=selected%> value=<%=app.schemas.AccountTypes[accountType]%>>
+                                <%=accountType%>
+                            </option>
+                        <%}%>
+                    </select>
+                </li>
+                <input type="hidden" name="_id" value="<%=userObj._id||''%>">
+                <li><input class="submit_btn" type="submit" value="Save"></li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(ev){
+        $("#user_form").validate()
+    })
+
+</script>
