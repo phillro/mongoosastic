@@ -40,7 +40,7 @@ app.configure(function () {
 everyauth.helpExpress(app);
 
 //Protect the paths
-app.all(/^\/(tweeters|articles|publications|sourcecontent|)\/.*/,function(req,res, next){
+app.all(/^\/(tweeters|articles|publications|sourcecontent|users|expertises)\/.*/,function(req,res, next){
     if(env=='production'){
     if(req.session.auth){
         if(req.session.auth.loggedIn)
