@@ -74,7 +74,7 @@ exports.expertisesList = function (req, res) {
     previous = (start - perpage) > 0 ? start - perpage : 0
 
     models.Expertise.count(function (countError, count) {
-        models.Expertise.find({is_root:true}).skip(start).limit(perpage).sort('createdAt', 'descending').execFind(function (err, expertises) {
+        models.Expertise.find({is_root:true}).skip(start).limit(perpage).sort('name', 'ascending').execFind(function (err, expertises) {
             if (err) {
                 res.send(err)
             } else {
@@ -121,14 +121,14 @@ exports.expertisesShow = function (req, res) {
             });
         },
         function (expertise, stepTwoCallback) {
-            models.Tweeter.find({ma_expertise:{$ne:expertise._id}}, function (err, availableTweeters) {
+            models.Tweeter.find({ma_expertise:{$ne:expertise._id}},{},{sort:{'name':1}}, function (err, availableTweeters) {
                 console.log(err)
                 availableTweeters = availableTweeters || []
                 stepTwoCallback(err, expertise, availableTweeters)
             });
         },
         function (expertise, availableTweeters, stepThreeCallback) {
-            models.Tweeter.find({ma_expertise:expertise._id}, function (err, expertiseTweeters) {
+            models.Tweeter.find({ma_expertise:expertise._id},{},{sort:{'name':1}}, function (err, expertiseTweeters) {
                 if (err)
                     console.log(err)
                 expertiseTweeters = expertiseTweeters || []
