@@ -121,7 +121,7 @@ exports.tweeterSave = function (req, res) {
         //its a new tweeter
         delete req.body._id
 
-            if(typeof eq.body.ma_expertise=='string')
+            if(typeof req.body.ma_expertise=='string')
                 req.body.ma_expertise=[req.body.ma_expertise]
 
         tweeter = new models.Tweeter(req.body)
