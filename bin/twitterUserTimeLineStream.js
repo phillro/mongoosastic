@@ -22,7 +22,7 @@ var logger = conf.twitterClientLogger
 
 var Tweeter = mediaAmpDb.model('tweeter', MediaAmpModels.TweeterSchema)
 var Tweet = mediaAmpDb.model('tweet', MediaAmpModels.TweeterSchema)
-var Helpers = new require('../lib/Helpers')(conf)
+var Helpers = new require('../lib/ProtoHelpers.js')(conf)
 var schedule = require('node-schedule');
 var child_proc = require('child_process');
 

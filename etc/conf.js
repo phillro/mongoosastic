@@ -191,7 +191,7 @@ module.exports = {
         },
         redis:{
             port:6379,
-            host:'domU-12-31-38-07-4D-36.compute-1.internal',
+            host:'ec2-50-19-187-107.compute-1.amazonaws.com',
             db:'mediaamp'
         },
 

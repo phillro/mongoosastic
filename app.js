@@ -23,7 +23,7 @@ GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionStr
 var MediaAmpModels = require('mediaamp-models/index.js')
 GLOBAL.schemas = app.schemas =  MediaAmpModels
 GLOBAL.models = app.models= MediaAmpModels.loadModels(modelsDb,app.schemas)
-GLOBAL.maHelper = new require('./lib/Helpers')(conf)
+GLOBAL.maHelper = new require('lib/ProtoHelpers.js')(conf)
 
 var everyauth = new require('./lib/auth')(app)
 
