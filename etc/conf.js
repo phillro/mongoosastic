@@ -219,11 +219,12 @@ module.exports = {
 
         mongo:{
             dbName:'ma1',
-            port:33097,
+            port:31177,
             host:'ds031177.mongolab.com',
             user:'ma1_data',
             password:'mediaampsys'
         },
+
         baseUrl:'http://localhost',
         port:3000,
         socketPort:3000,
