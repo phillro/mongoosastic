@@ -75,6 +75,17 @@ module.exports = {
                 secure:false,
             }
         },
+        shortener:{
+            mongo:{
+                dbName:'shory',
+                port:33097,
+                host:'ds033097.mongolab.com',
+                user:'mashort',
+                password:'mediaampsys'
+            },
+            domain : 'localhost',
+            port: 3000,
+        }
     },
 
 
@@ -134,9 +145,9 @@ module.exports = {
             password:'mediaampsys'
         },
         baseUrl:'http://localhost',
-                port:3000,
-                socketPort:3000,
-                frontSocketPort:3000,
+        port:3000,
+        socketPort:3000,
+        frontSocketPort:3000,
         socketOptions:{
             debugLevel:0,
             minifyJs:false
@@ -153,6 +164,17 @@ module.exports = {
                 port:9200,
                 secure:false,
             }
+        },
+        shortener:{
+            mongo:{
+                dbName:'shory',
+                port:33097,
+                host:'ds033097.mongolab.com',
+                user:'mashort',
+                password:'mediaampsys'
+            },
+            domain : 'localhost',
+            port: 3000,
         }
     },
     production:{
@@ -197,7 +219,7 @@ module.exports = {
 
         mongo:{
             dbName:'ma1',
-            port:31177,
+            port:33097,
             host:'ds031177.mongolab.com',
             user:'ma1_data',
             password:'mediaampsys'
@@ -221,6 +243,17 @@ module.exports = {
                 port:9200,
                 secure:false,
             }
+        },
+        shortener:{
+            mongo:{
+                dbName:'shory',
+                port:33097,
+                host:'ds033097.mongolab.com',
+                user:'mashort',
+                password:'mediaampsys'
+            },
+            domain:'amp.tw',
+            port:80,
         },
     },
 

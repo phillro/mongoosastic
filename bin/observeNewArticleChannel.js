@@ -28,7 +28,7 @@ var mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionString);
 var redisClient = new Redis.createClient(conf.redis.port, conf.redis.host);
 var schemas = MediaAmpModels
 var models = MediaAmpModels.loadModels(mediaAmpDb, schemas)
-var services = MediaAmpModels.loadServices(models, redisClient)
+var services = MediaAmpModels.loadServices({models:models, redisClient:redisClient, logger:logger, conf:conf})
 
 
 var redisClient = new Redis.createClient(conf.redis.port, conf.redis.host);
