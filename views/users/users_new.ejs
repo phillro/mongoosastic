@@ -31,6 +31,23 @@
                         <%}%>
                     </select>
                 </li>
+                <li>
+                    <label>Tweeter Profile</label>
+                    <select name="tweeter_id">
+                        <option value="none">None</option>
+                        <% for(var i in availableTweeters){ %>
+                        <%var selected=""%>
+                            <%if(userObj.tweeter_id){%>
+                            <%if(availableTweeters[i]._id.toString()==userObj.tweeter_id.toString()){%>
+                                <%selected="selected"%>
+                            <%}%>
+                            <%}%>
+                            <option <%=selected%> value="<%=availableTweeters[i]._id%>">
+                                <%=availableTweeters[i].screen_name%>
+                            </option>
+                        <%}%>
+                    </select>
+                </li>
                 <input type="hidden" name="_id" value="<%=userObj._id||''%>">
                 <li><input class="submit_btn" type="submit" value="Save"></li>
             </ul>

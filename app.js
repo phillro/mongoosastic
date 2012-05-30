@@ -23,7 +23,7 @@ GLOBAL.modelsDb = mediaAmpDb = mongoose.createConnection(mediaAmpDbConnectionStr
 var MediaAmpModels = require('mediaamp-models/index.js')
 GLOBAL.schemas = app.schemas =  MediaAmpModels
 GLOBAL.models = app.models= MediaAmpModels.loadModels(modelsDb,app.schemas)
-GLOBAL.maHelper = new require('lib/ProtoHelpers.js')(conf)
+GLOBAL.maHelper = new require('./lib/ProtoHelpers.js')(conf)
 
 var everyauth = new require('./lib/auth')(app)
 
@@ -41,7 +41,7 @@ everyauth.helpExpress(app);
 
 //Protect the paths
 app.all(/^\/(tweeters|articles|publications|sourcecontent|users|expertises)\/.*/,function(req,res, next){
-    if(env=='production'){
+    /*if(env=='production'){
     if(req.session.auth){
         if(req.session.auth.loggedIn)
             next()
@@ -50,7 +50,8 @@ app.all(/^\/(tweeters|articles|publications|sourcecontent|users|expertises)\/.*/
         res.redirect('/login')
     }else{
         next()
-    }
+    }*/
+    next()
 })
 
 app.get('/logout', function (req, res) {
