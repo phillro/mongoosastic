@@ -15,9 +15,8 @@ cli.parse({
 });
 
 
-
 var env = cli.args.shift() || 'production'
-    console.log(env)
+console.log(env)
 conf = require('../etc/conf')[env]
 var async = require('async')
 var mediaAmpDbConnectionString = 'mongodb://' + conf.mongo.user + ':' + conf.mongo.password + '@' + conf.mongo.host + ':' + conf.mongo.port + '/' + conf.mongo.dbName
@@ -141,8 +140,13 @@ var updateScore = function (count, cb) {
 
 }
 
-updateScore(100, function (err, scoredArticles) {
-    if(err){
+function runUpdateScore() {
+    console.log('updating scores')
+    updateScore(100, runUpdateScoreComplete)
+}
+
+function runUpdateScoreComplete(err, scoredArticles) {
+    if (err) {
         console.log(err)
     }
     //var csvFile = cli.args.shift()
@@ -161,10 +165,11 @@ updateScore(100, function (err, scoredArticles) {
                 console.log(error.message);
                 process.exit(0)
             });
-    }else{
+    } else {
         console.log('Number of articles: ' + scoredArticles.length);
         console.log('done')
-        process.exit(0)
     }
+    setTimeout(runUpdateScore, 30000)
+}
 
-})
+runUpdateScore()
