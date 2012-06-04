@@ -114,7 +114,7 @@ var updateScore = function (count, cb) {
                                             var s = 1
                                             async.forEach(scores, function (score, scoreCallback) {
                                                 s++
-                                                var uniformScore = s * positionValue * 100
+                                                var uniformScore = s * positionValue 
                                                 var normalScore = (100 / 2) + (100 / 8) * (score.score - avg) / standard_deviation
                                                 scoredArticles.push({articleId:score.articleId, score:score.score, normal:normalScore, uniform:uniformScore})
 
