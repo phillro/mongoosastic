@@ -109,13 +109,52 @@ var updateScore = function (count, cb) {
                                             }
                                             var avg = stats.getAverageFromNumArr(scoreValues)
                                             var standard_deviation = stats.getStandardDeviation(scoreValues)
+
+                                            var integral = 0;
+                                            var bar_width = standard_deviation / 100;
+                                            for (var a = 1; a < 400; a++) {
+                                                integral += bar_width * stats.normalDistribution(a * bar_width,avg,standard_deviation);
+                                            }
+                                            integral = integral * 2;
+                                            var mapping = {};
+                                            var start = integral / 2;
+                                            for (var a = 1; a < 400; a++) {
+                                                var proportion = Math.floor(100 * (bar_width * stats.normalDistribution(a * bar_width,avg,standard_deviation) + start / integral));
+                                                if (!mapping[proportion]) {
+                                                    mapping[proportion] = a * bar_width
+                                                }
+                                                ;
+                                                start += bar_width * stats.normalDistribution(a * bar_width,avg,standard_deviation);
+                                            }
+
+                                            //bucket divisions
+                                            var divisions = {};
+                                            for (var a in mapping) {
+                                                if (a == 50) {
+                                                    divisions[avg] = 50
+                                                }
+                                                else {
+                                                    divisions[avg + mapping[a]] = parseInt(a);
+                                                    divisions[avg - mapping[a]] = 50 - (a - 50);
+                                                }
+                                            }
+
+
                                             var scoredArticles = []
                                             var positionValue = 100 / scoreValues.length;
                                             var s = 1
                                             async.forEach(scores, function (score, scoreCallback) {
+                                                var closest = 100000;
+                                                var normalScore = 0;
+                                                for (var d in divisions) {
+                                                    if (closest > Math.abs(score.score - d)) {
+                                                        normalScore = divisions[d]
+                                                        closest = Math.abs(score.score - d);
+                                                    }
+                                                }
                                                 s++
                                                 var uniformScore = s * positionValue
-                                                var normalScore = (100 / 2) + (100 / 8) * (score.score - avg) / standard_deviation
+                                                //var normalScore = (100 / 2) + (100 / 8) * (score.score - avg) / standard_deviation
                                                 scoredArticles.push({articleId:score.articleId, score:score.score, normal:normalScore, uniform:uniformScore})
 
                                                 db.Article.update({_id:score.articleId}, {$set:{'meta.normal_score':normalScore, 'meta.uniform_score':uniformScore}}, {multi:true}, function (err, result) {
@@ -150,7 +189,7 @@ function runUpdateScoreComplete(err, scoredArticles) {
         console.log(err)
     }
     //var csvFile = cli.args.shift()
-    if (false) {
+    if (true) {
         csv()
             .from(scoredArticles)
             .toPath(__dirname + '/scores.csv')
