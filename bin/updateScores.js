@@ -189,7 +189,7 @@ function runUpdateScoreComplete(err, scoredArticles) {
         console.log(err)
     }
     //var csvFile = cli.args.shift()
-    if (true) {
+    if (false) {
         csv()
             .from(scoredArticles)
             .toPath(__dirname + '/scores.csv')
