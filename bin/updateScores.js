@@ -36,7 +36,7 @@ var updateScore = function (count, cb) {
         referenced_count:.5
     }
     var oneDay = new Date();
-    oneDay.setDate(oneDay.getDate() - 1);
+    oneDay.setDate(oneDay.getDate() - 5);
     var queryRange = {createdAt:{$gt:oneDay}}
     {
         createdAt:-1
