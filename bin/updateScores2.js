@@ -25,7 +25,7 @@ cli.main(function (args, options) {
     var services = MediaAmpModels.loadServices({models:models, redisClient:redisClient, logger:logger, conf:conf})
     console.log('Start update scores 2 score constants at ' + new Date())
     var oneDay = new Date();
-    oneDay.setDate(oneDay.getDate() - .5);
+    oneDay.setDate(oneDay.getDate() - .25);
     var queryRange = {createdAt:{$gt:oneDay}}
     models.Article.find(queryRange, function (err, articles) {
 
