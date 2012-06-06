@@ -83,8 +83,17 @@ module.exports = {
                 user:'mashort',
                 password:'mediaampsys'
             },
-            domain : 'localhost',
-            port: 3000,
+            domain:'localhost',
+            port:3000,
+        },
+        defaultArticleWeightSet:{
+            white_click_count:.15,
+            unknown_click_count:.15,
+            white_amp_count:.05,
+            unknown_amp_count:.05,
+            white_saved_count:.05,
+            unknown_saved_count:.05,
+            referenced_count:.5
         }
     },
 
@@ -173,8 +182,17 @@ module.exports = {
                 user:'mashort',
                 password:'mediaampsys'
             },
-            domain : 'localhost',
-            port: 3000,
+            domain:'localhost',
+            port:3000,
+        },
+        defaultArticleWeightSet:{
+            white_click_count:.15,
+            unknown_click_count:.15,
+            white_amp_count:.05,
+            unknown_amp_count:.05,
+            white_saved_count:.05,
+            unknown_saved_count:.05,
+            referenced_count:.5
         }
     },
     production:{
@@ -256,6 +274,16 @@ module.exports = {
             domain:'amp.tw',
             port:80,
         },
+        defaultArticleWeightSet:{
+            white_click_count:.15,
+            unknown_click_count:.15,
+            white_amp_count:.05,
+            unknown_amp_count:.05,
+            white_saved_count:.05,
+            unknown_saved_count:.05,
+            referenced_count:.5
+        }
     },
+
 
 }
