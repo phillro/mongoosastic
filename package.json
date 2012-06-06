@@ -1,32 +1,31 @@
 {
-    "name": "MediaAmp"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-     "elasticsearchclient":">=0.2.0"
-    , "mongoose":">=2.5.13"
-    , "resque":">=0.0.1"
-    , "cli":">=0.0.1"
-    , "connect":">0.0.1"
-    , "connect-redis":">=0.0.1"
-    , "ntwitter":">0.0.1"
-    , "redis":">0.0.1"
-    , "ejs":">0.0.1"
-    , "jade":">0.0.1"
-    , "csv":">0.0.1"
-    , "mhash":">0.0.1"
-    , "winston":">0.0.1"
-    , "request":">0.0.1"
-    , "node-schedule":">0.0.1"
-    , "async":">0.0.1"
-    , "node.io":">0.0.1"
-    , "express":">0.0.1"
-    ,"everyauth":">0.0.1"
-    , "mediaamp-data":"git+ssh://git@github.com:MediaProjectAmp/MediaAmp-Models.git"
-    , "jsdom":">0.0.1"
-    , "jquery":">0.0.1"
-    , "md5":">0.0.1"
-    , "node.extend":">0.0.1"
-    , "short":">0.0.1"
-    }
+    "name":"MediaAmp", "version":"0.0.1", "private":true, "dependencies":{
+    "elasticsearchclient":">=0.2.0",
+    "mongoose":">=2.5.13",
+    "resque":">=0.0.1",
+    "cli":">=0.0.1",
+    "connect":">0.0.1",
+    "connect-redis":">=0.0.1",
+    "ntwitter":">0.0.1",
+    "redis":">0.0.1",
+    "ejs":">0.0.1",
+    "jade":">0.0.1",
+    "csv":">0.0.1",
+    "mhash":">0.0.1",
+    "winston":">0.0.1",
+    "request":">0.0.1",
+    "node-schedule":">0.0.1",
+    "async":">0.0.1",
+    "node.io":">0.0.1",
+    "express":">0.0.1",
+    "everyauth":">0.0.1",
+    "mediaamp-data":"git+ssh://git@github.com:MediaProjectAmp/MediaAmp-Models.git",
+    "jsdom":">0.0.1",
+    "jquery":">0.0.1",
+    "md5":">0.0.1",
+    "node.extend":">0.0.1",
+    "short":">0.0.1",
+    "moment":">=0.0.1",
+    "node-google-sql":">=0.0.1"
+}
 }

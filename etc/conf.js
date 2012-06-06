@@ -94,7 +94,11 @@ module.exports = {
             white_saved_count:.05,
             unknown_saved_count:.05,
             referenced_count:.5
+        }, google:{
+            user:'mediaampsys@gmail.com',
+            password:'Monitor110'
         }
+
     },
 
 
@@ -193,6 +197,9 @@ module.exports = {
             white_saved_count:.05,
             unknown_saved_count:.05,
             referenced_count:.5
+        }, google:{
+            user:'mediaampsys@gmail.com',
+            password:'Monitor110'
         }
     },
     production:{
@@ -282,6 +289,10 @@ module.exports = {
             white_saved_count:.05,
             unknown_saved_count:.05,
             referenced_count:.5
+        },
+        google:{
+            user:'mediaampsys@gmail.com',
+            password:'Monitor110'
         }
     },
 
