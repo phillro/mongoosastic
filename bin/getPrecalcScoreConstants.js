@@ -23,13 +23,14 @@ cli.main(function (args, options) {
     var schemas = MediaAmpModels
     var models = MediaAmpModels.loadModels(mediaAmpDb, schemas)
     var services = MediaAmpModels.loadServices({models:models, redisClient:redisClient, logger:logger, conf:conf})
-    console.log('Start precalc score constants at '+new Date())
-    services.scoringService.calculateScoreConstants(undefined, function (err, result) {
+
+    services.scoringService.getScoreConstants(function (err, scoreConstants) {
         if (err)
             console.log(err)
         else {
-            console.log('Complete precalc score constants at '+new Date())
-            console.log('Calculated Score Constants')
+
+            console.log('Calculated Score Constants:')
+                console.log(scoreConstants)
             process.exit(0)
         }
     })
