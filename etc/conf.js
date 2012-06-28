@@ -242,13 +242,13 @@ module.exports = {
             db:'mediaamp'
         },
 
-        mongo:{
-            dbName:'ma1',
-            port:31177,
-            host:'ds031177.mongolab.com',
-            user:'ma1_data',
-            password:'mediaampsys'
-        },
+      mongo:{
+          dbName:'ma2',
+          port:27017,
+          host:'ec2-50-17-87-94.compute-1.amazonaws.com',
+          user:'ma1',
+          password:'mediaampsys'
+      },
 
         baseUrl:'http://localhost',
         port:3000,
