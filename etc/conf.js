@@ -68,13 +68,15 @@ module.exports = {
             debugLevel:0,
             minifyJs:false
         },
-        es_conf:{
-            mediaamp:{
-                host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
-                port:9200,
-                secure:false,
-            }
-        },
+      es_conf:{
+          mediaamp:{
+              host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
+              port:9200,
+              secure:false,
+              indexName:'mediaamp'
+          }
+      },
+      indexArticles:true,
         shortener:{
             mongo:{
                 dbName:'shory',
@@ -171,13 +173,15 @@ module.exports = {
             debugLevel:0,
             minifyJs:false
         },
-        es_conf:{
-            mediaamp:{
-                host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
-                port:9200,
-                secure:false,
-            }
-        },
+      es_conf:{
+          mediaamp:{
+              host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
+              port:9200,
+              secure:false,
+              indexName:'mediaamp'
+          }
+      },
+      indexArticles:true,
         shortener:{
             mongo:{
                 dbName:'shory',
@@ -263,13 +267,15 @@ module.exports = {
             debugLevel:0,
             minifyJs:false
         },
-        es_conf:{
-            mediaamp:{
-                host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
-                port:9200,
-                secure:false,
-            }
-        },
+      es_conf:{
+          mediaamp:{
+              host:'esnodes-844625410.us-east-1.elb.amazonaws.com',
+              port:9200,
+              secure:false,
+              indexName:'mediaamp'
+          }
+      },
+      indexArticles:true,
         shortener:{
             mongo:{
                 dbName:'shory',
